@@ -1,0 +1,175 @@
+\documentclass{article}
+
+\usepackage{tikz} 
+\usetikzlibrary{automata, positioning, arrows} 
+
+\usepackage{array}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage{parskip}
+\usepackage{hyperref}
+  \hypersetup{
+    colorlinks = true,
+    urlcolor = blue,       % color of external links using \href
+    linkcolor= blue,       % color of internal links 
+    citecolor= blue,       % color of links to bibliography
+    filecolor= blue,        % color of file links
+    }
+    
+\usepackage{listings}
+\usepackage[utf8]{inputenc}                                                    
+\usepackage[T1]{fontenc}                                                       
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=haskell,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\newtheoremstyle{theorem}
+  {\topsep}   % ABOVESPACE
+  {\topsep}   % BELOWSPACE
+  {\itshape\/}  % BODYFONT
+  {0pt}       % INDENT (empty value is the same as 0pt)
+  {\bfseries} % HEADFONT
+  {.}         % HEADPUNCT
+  {5pt plus 1pt minus 1pt} % HEADSPACE
+  {}          % CUSTOM-HEAD-SPEC
+\theoremstyle{theorem} 
+   \newtheorem{theorem}{Theorem}[section]
+   \newtheorem{corollary}[theorem]{Corollary}
+   \newtheorem{lemma}[theorem]{Lemma}
+   \newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+   \newtheorem{definition}[theorem]{Definition}
+   \newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}    
+  \newtheorem{remark}[theorem]{Remark}
+
+\title{CPSC-406 Report}
+\author{ Angelina House  \\ Chapman University}
+
+\date{\today} 
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\setcounter{tocdepth}{3}
+\tableofcontents
+
+\section{Introduction}\label{intro}
+
+\section{Week by Week}\label{homework}
+
+\subsection{Week 1}
+
+\subsubsection*{Notes}
+
+Week One Notes.
+  
+\subsubsection*{Homework}
+
+None
+
+\subsubsection*{Reflection}
+
+comments and questions
+
+\subsection{Week 2}
+
+
+\subsubsection*{Notes}
+
+This week we covered Derterministic Finite Automata (DFA) and continued to build on our definition on automata from week one. 
+
+\subsubsection*{Homework}
+
+%Homework One builds on the foundations of automata that was covered last week. 
+\textbf{Question 1:} Determine for the following words, if they are contained in  L1, L2, or L3
+\smallskip
+
+The equations are:
+
+\[L_1 := \{ x01y \mid x, y \in \Sigma^* \}\]
+\[L_2 := \{ w \mid |w| = 2^n \text{ for some } n \in \mathbb{N} \}\]
+\[L_3 := \{ w \mid |w|_0 = |w|_1 \}\]
+
+Using the given chart and the given equations we can come to the following conclusions.
+
+\smallskip
+
+\begin{center}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \textbf{Word} & \( L_1 \) (Contains "01") & \( L_2 \) (Length \( 2^n \)) & \( L_3 \) (Equal 0s and 1s) \\
+        \hline 
+        $ w_1 = 10011 $ & $\checkmark$ & $x$ & $x$ \\
+        \hline
+        \( w_2 = 100 \) & $x$ & $x$ & $x$ \\
+        \hline 
+        $ w_3 = 10100100 $ & $\checkmark$ & $\checkmark$ & \texttimes \\
+        \hline
+        \( w_4 = 1010011100 \) & \checkmark & \texttimes & \checkmark \\
+        \hline
+        \( w_5 = 11110000 \) & \texttimes & \checkmark & \checkmark \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\smallskip
+
+By following the the language equations, conditions, and comparing using the word we can determine whether the word would be accepted in the equation.
+
+\bigskip
+
+\textbf{Question 2:} Let \( \Sigma \) be some fixed alphabet and \( \mathcal{A} = (Q, \Sigma, \delta, q_0, F) \) be a finite automaton. The DFA \( \mathcal{A} \) can "process" a word by tracing through it via a sequence of transitions corresponding to the letters of the word.
+\\Consider the paths corresponding to the words:
+
+\[w_1 = 0010, \quad w_2 = 1101, \quad \text{and} \quad w_3 = 1100.\]
+
+For which of these words does their run end in the accepting state?
+\[w_1 \text{ and } w_2 \text{ end in the accepting state. Following the given graph and going through the word we can determine that }  w_1 \text{ and } w_2 \text{will end in the acceptin state and } w_3 \text{ will end at } q_2 \text{which is not the accepted state.}\]
+
+
+\subsubsection*{Reflection}
+
+comments and questions
+
+\subsection{Week 3}
+
+Week Three notes.
+
+\section{Synthesis}
+
+\section{Evidence of Participation}
+
+\section{Conclusion}\label{conclusion}
+
+\begin{thebibliography}{99}
+\bibitem[BLA]{bla} Author, \href{https://en.wikipedia.org/wiki/LaTeX}{Title}, Publisher, Year.
+\end{thebibliography}
+
+\end{document}
