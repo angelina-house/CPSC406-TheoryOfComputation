@@ -92,11 +92,56 @@ Week One Notes.
   
 \subsubsection*{Homework}
 
-None
+\textbf(Question 1:) Characterize all the accepted words (i.e., describe exactly those words that get recognized).
+\smallskip
+
+We can first start characterizing the accepted words by looking at the given graph and gaining an understanding of the automaton. 
+In this automaton there we have a coin machine which needs 25 cent and can only take 5 and 10 cent coins. We can see that the machine will accept the word if the sum of the coins is 25 cents.
+With this we can characterize the accepted words as follows:
+\[
+\begin{aligned}
+    &5 \; 5 \; 5 \; 5 \; 5 \\
+    &5 \; 5 \; 5 \; 10 \\
+    &5 \; 5 \; 10 \; 5 \\
+    &5 \; 10 \; 5 \; 5 \\
+    &10 \; 5 \; 5 \; 5 \\
+    &10 \; 10 \; 5 \\
+    &10 \; 5 \; 10 \\
+    &5 \; 10 \; 10
+\end{aligned}
+\]
+
+\bigskip
+
+\textbf{Question 2:} Characterize all the accepted words. Can you describe them via a regular expression?
+
+We can first start charaterizing the accepted words by understanding the graph, states, and transitions. In this graph, pay moves the turnstile from locked to unlocked, push turns the turnstile from unlocked
+to locked, if the turnstile is already unlocked a pay occurs then it remains unlocked and if the turnstile is locked and a push is used then nothing happens. With this understanding we can formulate that atleast 
+one pay is needed to unlock the turnstile, any number of pay's can happen while the turnstile is unlocked and a push after a pay locked the turnstile making it need another pay to unlock again.
+With this we can characterize the accepted words as follows:
+
+\[
+\begin{aligned}
+    &\texttt{pay} \\
+    &\texttt{pay pay} \\
+    &\texttt{pay pay pay} \\
+    &\texttt{pay push pay} \\
+    &\texttt{pay pay push pay} \\
+    &\texttt{pay pay pay push pay} \\
+\end{aligned}
+\]
+Overall, the pattern follows:
+\[
+\texttt{pay (push pay)*}
+\]
+
+\bigskip
 
 \subsubsection*{Reflection}
 
 comments and questions
+
+\bigskip
 
 \subsection{Week 2}
 
@@ -154,9 +199,13 @@ For which of these words does their run end in the accepting state?
 \[w_1 \text{ and } w_2 \text{ end in the accepting state. Following the given graph and going through the word we can determine that }  w_1 \text{ and } w_2 \text{will end in the acceptin state and } w_3 \text{ will end at } q_2 \text{which is not the accepted state.}\]
 
 
-\subsubsection*{Reflection}
+\subsubsection*{Reading Summary}
 
-comments and questions
+Section 2.1 introduces finite automata in a straightforward easy to comprehend way by explaining how they work and why they’re useful. A finite automaton is a simple computational model that processes input by transitioning between a set number of states. It follows predefined 
+rules to determine what state to move to based on the input it receives. The section gives real world examples where finite automata are applied, such as text searching, lexical analysis in programming languages, digital circuit design, and verifying network protocols. 
+These machines help computers recognize patterns and process sequences efficiently.The section discusses two main types, Deterministic Finite Automata (DFA), where each state has only one possible transition per input, and Nondeterministic Finite Automata (NFA), which allows
+multiple possible transitions. Both are equally as powerful but NFA's are typically more flexible. This section doesn’t get too technical yet it just lays the foundation for the more detailed discussions coming later. The key takeaway is that while finite automata are simple,
+they play an essential role in many areas of computer science, especially in recognizing and processing data.
 
 \subsection{Week 3}
 
