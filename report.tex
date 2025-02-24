@@ -1,5 +1,6 @@
 \documentclass{article}
 
+
 \usepackage{tikz} 
 \usetikzlibrary{automata, positioning, arrows} 
 
@@ -92,7 +93,7 @@ Week One Notes.
   
 \subsubsection*{Homework}
 
-\textbf(Question 1:) Characterize all the accepted words (i.e., describe exactly those words that get recognized).
+\textbf{Question 1:} Characterize all the accepted words (i.e., describe exactly those words that get recognized).
 \smallskip
 
 We can first start characterizing the accepted words by looking at the given graph and gaining an understanding of the automaton. 
@@ -137,7 +138,7 @@ Overall, the pattern follows:
 
 \bigskip
 
-\subsubsection*{Reflection}
+\subsubsection*{Reading Summary}
 
 comments and questions
 
@@ -199,7 +200,7 @@ For which of these words does their run end in the accepting state?
 \[w_1 \text{ and } w_2 \text{ end in the accepting state. Following the given graph and going through the word we can determine that }  w_1 \text{ and } w_2 \text{will end in the acceptin state and } w_3 \text{ will end at } q_2 \text{which is not the accepted state.}\]
 
 
-\subsubsection*{Reading Summary}
+\subsubsection*{Reading Summary and Questions}
 
 Section 2.1 introduces finite automata in a straightforward easy to comprehend way by explaining how they work and why they’re useful. A finite automaton is a simple computational model that processes input by transitioning between a set number of states. It follows predefined 
 rules to determine what state to move to based on the input it receives. The section gives real world examples where finite automata are applied, such as text searching, lexical analysis in programming languages, digital circuit design, and verifying network protocols. 
@@ -207,9 +208,189 @@ These machines help computers recognize patterns and process sequences efficient
 multiple possible transitions. Both are equally as powerful but NFA's are typically more flexible. This section doesn’t get too technical yet it just lays the foundation for the more detailed discussions coming later. The key takeaway is that while finite automata are simple,
 they play an essential role in many areas of computer science, especially in recognizing and processing data.
 
+\smallskip
+
+My questions this week was regarding the complexities of finite automata. It was "Is there a point where an automata gets too complicated to the point where its not the best option anymore? If so, is there any alternatives to the automaton that might work better in this situation?"
+
 \subsection{Week 3}
 
-Week Three notes.
+\subsubsection*{Notes}
+
+\subsubsection*{Homework}
+
+Homework two include two lab questions from our week two lab. The labs focus on developing and altering a DFA from code as well as understanding the varuous actions that can be done to them. 
+In the first question, we are asked to implement the run function as well as define the $A_1$ and $A_2$ from the imagaes given. In the following question, we are asked to consider a new automaton $A_3$ and implement a new refuse function. This is all done within three different python files, dfa.py, dfa_ex01.py and dfa_ex03.py.
+
+\smallskip
+
+
+\textbf{dfa.py:}
+\begin{lstlisting}
+  # dfa.py
+  class DFA:
+      def __init__(self, Q, Sigma, delta, q0, F):
+          self.Q = Q  # Set of states
+          self.Sigma = Sigma  # Alphabet
+          self.delta = delta  # Transition function
+          self.q0 = q0  # Initial state
+          self.F = F  # Accepting states
+  
+      def __repr__(self):
+          return f"DFA({self.Q},\n\t{self.Sigma},\n\t{self.delta},\n\t{self.q0},\n\t{self.F})"
+  
+      def run(self, w):
+          current_state = self.q0
+          for symbol in w:
+              if symbol not in self.Sigma:
+                  return False
+              current_state = self.delta.get((current_state, symbol))
+              if current_state is None:
+                  return False
+          return current_state in self.F  # Accept if in accepting state
+  
+      def refuse(self):
+          # new dfa that refuses input
+          return DFA(self.Q, self.Sigma, self.delta, self.q0, set())  
+  
+  # Example DFA 
+  if __name__ == "__main__":
+      Q = {'q0', 'q1'}
+      Sigma = {'0', '1'}
+      delta = {
+          ('q0', '0'): 'q0',
+          ('q0', '1'): 'q1',
+          ('q1', '0'): 'q1',
+          ('q1', '1'): 'q0'
+      }
+      q0 = 'q0'  # Initial state
+      F = {'q1'}  # Accepting state
+  
+      dfa = DFA(Q, Sigma, delta, q0, F)
+      print(dfa.run('101'))  # false
+      print(dfa.run('100'))  # true
+
+***** dfa_ex01.py: *****
+
+  from dfa import DFA  
+  
+  def generate_words():
+      words = [""]  
+      alphabet = ['a', 'b']
+      
+      # Generate words 
+      for first in alphabet:
+          words.append(first)
+          for second in alphabet:
+              words.append(first + second)
+              for third in alphabet:
+                  words.append(first + second + third)
+      
+      return words
+  
+  def __main__():
+      # Define DFA A1
+      A1 = DFA(
+          Q={1, 2, 3, 4},
+          Sigma={'a', 'b'},
+          delta={
+              (1, 'a'): 2, (1, 'b'): 4,
+              (2, 'a'): 2, (2, 'b'): 3,
+              (3, 'a'): 3, (3, 'b'): 3,
+              (4, 'a'): 4, (4, 'b'): 4
+          },
+          q0=1,
+          F={3}
+      )
+  
+      # Define DFA A2
+      A2 = DFA(
+          Q={1, 2, 3},
+          Sigma={'a', 'b'},
+          delta={
+              (1, 'a'): 2, (1, 'b'): 1,
+              (2, 'a'): 3, (2, 'b'): 1,
+              (3, 'a'): 3, (3, 'b'): 3
+          },
+          q0=1,
+          F={3}
+      )
+  
+      words = generate_words()
+      automata = [A1, A2]
+  
+      # Test words on automata
+      for X in automata:
+          # print(f"{X.__repr__()}") # prints DFA representation
+          for w in words:
+              print(f"{w}: {X.run(w)}") # prints true or false
+          print("\n")
+  
+  __main__()
+
+***** dfa_ex03.py: *****
+
+  from dfa import DFA 
+  
+  def generate_words():
+      words = [""]
+      alphabet = ['a', 'b']
+      
+      for first in alphabet:
+          words.append(first)
+          for second in alphabet:
+              words.append(first + second)
+              for third in alphabet:
+                  words.append(first + second + third)
+      
+      return words
+  
+  def __main__():
+      # Define DFA A 
+      A = DFA(
+          Q={1, 2, 3, 4},  
+          Sigma={'a', 'b'},  
+          delta={  
+              (1, 'a'): 2, (1, 'b'): 4,
+              (2, 'a'): 3, (2, 'b'): 4,
+              (3, 'a'): 3, (3, 'b'): 3,
+              (4, 'a'): 2, (4, 'b'): 4
+          },
+          q0=1,  # Initial state
+          F={3, 4}  # Accepting states
+      )
+  
+      # Define DFA A0 (refuse)
+      A0 = A.refuse()
+  
+      words = generate_words()
+      automata = [A, A0]
+  
+      # Test words on automata
+      for X in automata:
+          # print(f"{X.__repr__()}") # Prints DFA representation
+          for w in words:
+              print(f"{w}: {X.run(w)}")  # Prints True or False
+          print("\n")
+  
+  __main__()
+  \end{lstlisting}
+
+\subsubsection*{Reading Summary and Questions}
+
+Section 2.2 focuses on Deterministic Finite Automata (DFA), which are computational models used to process input strings and determine whether they belong to a specific language. 
+A DFA consists of a finite set of states $Q$, a defined input alphabet $\Sigma$, transition rules $\delta$ that 
+dictate how the automaton moves between states, a starting state $q_0$, and one or more accepting states $F$ that signify valid inputs.
+The operation of a DFA is systematic: it begins in the initial state and processes an input string one symbol at a time, following a unique transition for each symbol. 
+Once the entire input has been read, the DFA determines acceptance based on its final state. If it ends in an accepting state, the input is considered valid; otherwise, it is rejected.
+Formally, a DFA is defined as a five-tuple $(Q, \Sigma, \delta, q_0, F)$, where $Q$ is the set of states, $\Sigma$ is the input alphabet, $\delta$ is the transition function that maps 
+states and inputs to new states, $q_0$ is the initial state, and $F$ is the set of accepting states. 
+DFAs are widely used in applications such as text searching, lexical analysis in programming, and pattern recognition. Their deterministic nature makes sure that for any given input, 
+the transition path is unique making them both predictable and efficient for structured data processing.
+
+\smallskip
+
+This week I was curious about the limits of a DFA. My question was "The book emphasized that DFA's can only process one string at a time but would we ever get to the point where it would 
+be able to process multiple strings at one time? Would it make the DFA simpler or more complex and at what point would we have to get quantum computing involved?"
 
 \section{Synthesis}
 
