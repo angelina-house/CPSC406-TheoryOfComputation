@@ -392,6 +392,103 @@ the transition path is unique making them both predictable and efficient for str
 This week I was curious about the limits of a DFA. My question was "The book emphasized that DFA's can only process one string at a time but would we ever get to the point where it would 
 be able to process multiple strings at one time? Would it make the DFA simpler or more complex and at what point would we have to get quantum computing involved?"
 
+
+\section{Week 4}
+
+\subsection*{Notes}
+
+\subsection*{Homework}
+
+\textbf{Question 1:} Describe the language accepted by $\mathcal{A}^{(2)}$
+The language accepted by $\mathcal{A}^{(2)}$ is that words must have an odd length and every odd indexed position must be a letter 'a'.
+Some accepted words are: $a, aba, aba, abaaaa, aaaaaaaa$
+
+\smallskip
+
+Compute the extended transition functions: \\
+
+\begin{enumerate}
+    \item \( \widehat{\delta^{(1)}}(1, abaa) \) for \( \mathcal{A}^{(1)} \)
+     Following the transitions on the input \( abaa \):
+
+    \begin{align*}
+        \text{Start at state } q_1. \\
+        \text{Read } 'a' \quad &\Rightarrow \quad q_2. \\
+        \text{Read } 'b' \quad &\Rightarrow \quad q_3. \\
+        \text{Read } 'a' \quad &\Rightarrow \quad q_4. \\
+        \text{Read } 'a' \quad &\Rightarrow \quad q_5. \\
+        \text{Making the final state } \quad q_5 
+    \end{align*}
+    
+    \item \( \widehat{\delta^{(2)}}(1, abba) \) for \( \mathcal{A}^{(2)} \)
+    Following the transitions on the input \( abba \):
+
+    \begin{align*}
+        \text{Start at state } p_1. \\
+        \text{Read } 'a' \quad &\Rightarrow \quad p_2. \\
+        \text{Read } 'b' \quad &\Rightarrow \quad p_3. \\
+        \text{Read } 'b' \quad &\Rightarrow \quad p_4. \\
+        \text{Read } 'a' \quad &\Rightarrow \quad p_5. \\
+        \text{Making the final state } \quad p_5 
+    \end{align*}
+
+\end{enumerate}
+
+\smallskip
+
+\textbf{Question 2: } \\ 
+Construct the product automaton \( \mathcal{A} \) that recognizes \( L(\mathcal{A}^{(1)}) \cap L(\mathcal{A}^{(2)}) \).
+
+\begin{itemize}
+    \item \textbf{States:} \( Q = Q^{(1)} \times Q^{(2)} \) (pairs of states from \( \mathcal{A}^{(1)} \) and \( \mathcal{A}^{(2)} \)).
+    \item \textbf{Alphabet:} \( \Sigma = \{a, b\} \).
+    \item \textbf{Transition function:} 
+    \[
+    \delta((q^{(1)}, q^{(2)}), x) = (\delta^{(1)}(q^{(1)}, x), \delta^{(2)}(q^{(2)}, x))
+    \]
+    \item \textbf{Initial state:} \( q_0 = (q_0^{(1)}, q_0^{(2)}) \).
+    \item \textbf{Accepting states:} \( F = F^{(1)} \times F^{(2)} \) (both states must be accepting).
+\end{itemize} \\
+
+Language of \( \mathcal{A} \):
+
+\begin{itemize}
+    \item Words must have \textbf{odd length}.
+    \item Every letter at an \textbf{odd position} must be \( a \).
+    \item No two consecutive letters can be the same.
+\end{itemize}
+
+\textbf{Examples of words in \( L(\mathcal{A}) \):}
+\begin{itemize}
+    \item \( a \), \( aba \), \( ababa \)
+\end{itemize}
+
+\textbf{Examples of words not in \( L(\mathcal{A}) \):}
+\begin{itemize}
+    \item \( b \) (does not start with \( a \))
+    \item \( aa \) (two consecutive \( a \)'s)
+    \item \( abaa \) (even length)
+    \item \( abba \) (incorrect odd-positioned character)
+\end{itemize} \\ 
+
+\( L(\mathcal{A}) \) is regular because regular languages are closed under intersection. Since \( L(\mathcal{A}^{(1)}) \) and \( L(\mathcal{A}^{(2)}) \) are regular, their intersection \( L(\mathcal{A}) \) is also regular.
+
+\bigskip
+
+\subsection*{Reading Summary and Questions}
+
+Section 2.3 covers Nondeterministic Finite Automata (NFA) and how they differ from Deterministic Finite Automata (DFA). The key difference is that, unlike a DFA where each state has exactly one transition per input, 
+an NFA allows multiple possible transitions, or none at all, for the same input symbol. This make an NFA capable of following multiple computational paths at once, making it more flexible. A string is accepted if at least one 
+of these paths leads to an accepting state. The section also introduces the extended transition function, which determines all the possible states an NFA can reach after processing a string. NFAs recognize the same class of 
+regular languages as DFAs. Any NFA can be converted into an equivalent DFA using the subset construction method but, this process can significantly increase the number of states, sometimes exponentially. Regardless, NFAs are 
+often more compact and easier to construct, making them useful in applications like pattern matching and lexical analysis. While DFAs and NFAs are equivalent in terms of what they can recognize, NFAs provide a more 
+convenient and flexible approach to defining automata.
+
+\smallskip
+
+My question this week was regarding certain use cases of NFA's and DFA's. What are some examples where a DFA would be prefered over and NFA and vice versa? What are some of the drawbacks to using one or the other 
+in these situations?
+
 \section{Synthesis}
 
 \section{Evidence of Participation}
