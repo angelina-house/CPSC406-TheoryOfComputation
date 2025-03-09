@@ -89,7 +89,9 @@
 
 \subsubsection*{Notes}
 
-Week One Notes.
+In week one we were introduced to basic automata therory and given multiple examples of how they can be used. 
+Our main example was one of a parking meter where we were introduced to states, transitions, and final states. 
+We also went over naming specifications, word lists and equations, and finite automata. 
   
 \subsubsection*{Homework}
 
@@ -140,7 +142,7 @@ Overall, the pattern follows:
 
 \subsubsection*{Reading Summary}
 
-comments and questions
+There was no readings or questions for this week. 
 
 \bigskip
 
@@ -150,6 +152,9 @@ comments and questions
 \subsubsection*{Notes}
 
 This week we covered Derterministic Finite Automata (DFA) and continued to build on our definition on automata from week one. 
+We focused on the bridge problem where we had to determine the best way to get across and then turn that into a DFA. 
+We also had our first lab where we focused on word processing and constructing automata. 
+
 
 \subsubsection*{Homework}
 
@@ -392,10 +397,10 @@ the transition path is unique making them both predictable and efficient for str
 This week I was curious about the limits of a DFA. My question was "The book emphasized that DFA's can only process one string at a time but would we ever get to the point where it would 
 be able to process multiple strings at one time? Would it make the DFA simpler or more complex and at what point would we have to get quantum computing involved?"
 
-
-\section{Week 4}
+\subsection{Week 4}
 
 \subsection*{Notes}
+
 
 \subsection*{Homework}
 
@@ -488,6 +493,158 @@ convenient and flexible approach to defining automata.
 
 My question this week was regarding certain use cases of NFA's and DFA's. What are some examples where a DFA would be prefered over and NFA and vice versa? What are some of the drawbacks to using one or the other 
 in these situations?
+
+
+\subsection{Week 5}
+
+ \subsection*{Notes}
+    \smallskip
+ 
+ \subsection*{Homework}
+
+\textbf{Question 1:} \\
+We can understand A as an NFA redefining the transition functions to allow for possible next states making it compatible with the power set of Q. If this is correctly done then the NFA interpretation from state q on input a will result in a non determinitic transitions to any state in the set. 
+For any given DFA $M = (Q, \Sigma, \delta, q_0, F)$, the corresponding NFA $M' = (Q', \Sigma, \delta', q_0', F')$ is defined as:
+\begin{itemize}
+    \item $Q' = Q$
+    \item $\delta'(q, a) = \{\delta(q, a)\} \quad \forall q \in Q, a \in \Sigma$
+    \item $q_0' = q_0$
+    \item $F' = F$
+\end{itemize}
+These descriptions ensure that the NFA accepts the same language as the original DFA since each transition remains deterministic.
+Since $\delta(q, a)$ in a DFA always returns a single state, the corresponding NFA transition function also only produces singleton sets.
+This means that for every input string $w \in \Sigma^*$, the sequence of transitions followed by the DFA is exactly the same as in the NFA.
+Because both automata start from the same initial state $q_0$ and have the same set of accepting states $F$, the set of accepted strings is identical.
+
+\smallskip
+
+\textbf{Question 2:} \\
+The given NFA A language can be described as
+\[
+L = \{ w \in \{a, b\}^* \mid w \text{ contains the substring "ab"} \}
+\]
+Any string in this language must contain at least one occurrence of the substring “ab” and the substring “ab” can appear anywhere in the string—at the beginning, middle, or end.
+A can be specified as:
+
+\[
+A = (Q, \Sigma, \delta, q_0, F)
+\]
+
+where:
+
+\begin{itemize}
+    \item \( Q = \{ q_0, q_1, q_2 \} \) is the set of states.
+    \item \( \Sigma = \{ a, b \} \) is the input alphabet.
+    \item \( q_0 \) is the initial state.
+    \item \( F = \{ q_0, q_1 \} \) is the set of accepting states.
+    \item \( \delta \) is the transition function defined as follows:
+\end{itemize}
+
+We compute the extended transition function \( \hat{\delta}(q_0, 10110) \) by processing the input string one symbol at a time:
+
+\begin{enumerate}
+    \item \textbf{Start State:} \( q_0 \)
+    \item \textbf{Input 1:} From \( q_0 \), on input \( 1 \), transition to \( q_1 \).
+    \[
+    q_0 \xrightarrow{1} q_1
+    \]
+    \item \textbf{Input 0:} From \( q_1 \), on input \( 0 \), transition to \( q_2 \).
+    \[
+    q_1 \xrightarrow{0} q_2
+    \]
+    \item \textbf{Input 1:} From \( q_2 \), on input \( 1 \), transition to \( q_1 \).
+    \[
+    q_2 \xrightarrow{1} q_1
+    \]
+    \item \textbf{Input 1:} From \( q_1 \), on input \( 1 \), transition to \( q_1 \) (self-loop).
+    \[
+    q_1 \xrightarrow{1} q_1
+    \]
+    \item \textbf{Input 0:} From \( q_1 \), on input \( 0 \), transition to \( q_2 \).
+    \[
+    q_1 \xrightarrow{0} q_2
+    \]
+\end{enumerate}
+
+\[
+\hat{\delta}(q_0, 10110) = q_2
+\]
+
+Computing Paths for \( v = 1100 \)
+
+We begin at the start state \( q_0 \) and process \( v = 1100 \) step by step.
+
+\begin{enumerate}
+    \item \textbf{Input 1:} From \( q_0 \), on input \( 1 \), transition to \( q_1 \).
+    \[
+    q_0 \xrightarrow{1} q_1
+    \]
+    \item \textbf{Input 1:} From \( q_1 \), on input \( 1 \), transition to \( q_1 \) (self-loop).
+    \[
+    q_1 \xrightarrow{1} q_1
+    \]
+    \item \textbf{Input 0:} From \( q_1 \), on input \( 0 \), transition to \( q_2 \).
+    \[
+    q_1 \xrightarrow{0} q_2
+    \]
+    \item \textbf{Input 0:} From \( q_2 \), on input \( 0 \), transition to \( q_3 \).
+    \[
+    q_2 \xrightarrow{0} q_3
+    \]
+\end{enumerate}
+
+\textbf{Final State for \( v = 1100 \):} \( q_3 \) (accepting state)
+
+Computing Paths for \( w = 1010 \)
+
+We begin at the start state \( q_0 \) and process \( w = 1010 \) step by step.
+
+\begin{enumerate}
+    \item \textbf{Input 1:} From \( q_0 \), on input \( 1 \), transition to \( q_1 \).
+    \[
+    q_0 \xrightarrow{1} q_1
+    \]
+    \item \textbf{Input 0:} From \( q_1 \), on input \( 0 \), transition to \( q_2 \).
+    \[
+    q_1 \xrightarrow{0} q_2
+    \]
+    \item \textbf{Input 1:} From \( q_2 \), on input \( 1 \), transition to \( q_1 \).
+    \[
+    q_2 \xrightarrow{1} q_1
+    \]
+    \item \textbf{Input 0:} From \( q_1 \), on input \( 0 \), transition to \( q_2 \).
+    \[
+    q_1 \xrightarrow{0} q_2
+    \]
+\end{enumerate}
+
+\textbf{Final State for \( w = 1010 \):} \( q_2 \) (not an accepting state)
+
+The power set \( P(Q) \), which represents the states of the equivalent DFA, can be represented as:
+
+\[
+P(Q) = \{ \emptyset, \{q_0\}, \{q_1\}, \{q_2\}, \{q_3\}, \{q_0, q_1\}, \{q_1, q_2\}, \{q_2, q_3\}, \{q_1, q_3\}, \{q_0, q_2\}, \{q_0, q_3\}, \{q_0, q_1, q_2\}, Q \}
+\]
+
+The DFA \( \mathcal{A}^D \) accepts the same language as \( \mathcal{A} \). By construction, the power set method guarantees that \( \mathcal{A}^D \) accepts exactly the same strings as \( \mathcal{A} \).
+Since every NFA has an equivalent DFA, and \( \mathcal{A}^D \) was obtained directly from \( \mathcal{A} \) via determinization.
+After minimization, a smaller DFA may exist that recognizes \( L(\mathcal{A}) \) with fewer states than the DFA obtained via power set construction.
+The minimal DFA provides a more efficient representation of the same language.
+ 
+\subsection*{Reading Summary and Questions}
+
+Section 3.1 introduces regular expressions, which provide a structured way to define patterns in strings. They use operations like union (\(\cup\)) to represent choices, 
+concatenation (\(\cdot\)) to combine elements, and the Kleene star (\(*\)) to indicate repetition. These rules help define regular languages and are widely 
+used in search functions, text processing, and programming. Section 3.2.1 explains how to convert a DFA into a regular expression by systematically breaking it down into smaller 
+expressions that describe all possible paths. This method gradually builds a final regular expression that represents the entire language of the DFA. Section 3.2.2 presents another 
+approach called state elimination, where states are removed one at a time, replacing their transitions with equivalent regular expressions until a single expression remains. 
+While this method is straightforward, it can sometimes result in overly complex expressions. In summary, these sections highlight the fundamental equivalence between DFAs and regular expressions, 
+showing that any language recognized by a DFA can be represented by a regular expression, and vice versa. \\
+
+My question this week was about converting a DFA into a regular expression and what challenges or issues might come up where it makes one approach better than the other?
+
+\bigskip
+
 
 \section{Synthesis}
 
