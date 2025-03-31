@@ -173,7 +173,7 @@ Using the given chart and the given equations we can come to the following concl
 \smallskip
 
 \begin{center}
-    \begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|l|l|l|l|}
         \hline
         \textbf{Word} & \( L_1 \) (Contains "01") & \( L_2 \) (Length \( 2^n \)) & \( L_3 \) (Equal 0s and 1s) \\
         \hline 
@@ -495,9 +495,10 @@ My question this week was regarding certain use cases of NFA's and DFA's. What a
 in these situations?
 
 
+
 \subsection{Week 5}
 
- \subsection*{Notes}
+\subsection*{Notes}
     \smallskip
  
  \subsection*{Homework}
@@ -645,6 +646,138 @@ My question this week was about converting a DFA into a regular expression and w
 
 \bigskip
 
+
+\subsection{Week 6}
+
+\subsection*{Notes}
+
+\subsection*{Homework}
+\textbf{3.2.1:}
+
+Given DFA:
+
+\[
+\begin{array}{c|cc}
+ & 0 & 1 \\
+\hline
+\rightarrow q_1 & q_2 & q_1 \\
+q_2 & q_3 & q_1 \\
+\ast q_3 & q_3 & q_2 \\
+\end{array}
+\]
+
+\begin{itemize}
+    \item[(a)] Direct transitions \( R_{ij}^{(0)} \):
+    \[\begin{bmatrix}
+    1 & 0 & \emptyset \\
+    1 & \emptyset & 0 \\
+    \emptyset & 1 & 0 \\
+    \end{bmatrix}\]
+
+    \item[(b)] Allowing paths through \( q_1 \), the key result is:
+    \[ R_{13}^{(1)} = \emptyset \]
+
+    \item[(c)] Allowing paths through \( q_1 \) and \( q_2 \):
+
+    \[R_{13}^{(2)} = 1^*0(1^*0)^*0\]
+
+    \item[(d)] Regular expression for the language:
+
+    \[L = 1^*0(1^*0)^*0\]
+
+    \item[(e)] After eliminating \( q_2 \), the result is the same:
+
+    \[L = 1^*0(1^*0)^*0\]
+\end{itemize}
+
+
+
+\textbf{3.2.2:}
+
+Given DFA:
+
+\[\begin{array}{c|cc}
+ & 0 & 1 \\
+\hline
+\rightarrow q_1 & q_2 & q_3 \\
+q_2 & q_1 & q_3 \\
+\ast q_3 & q_2 & q_1 \\
+\end{array}\]
+
+\begin{itemize}
+    \item[(c)] One way to reach \( q_3 \) from \( q_1 \) is:
+    
+    \[1, \quad 01, \quad 0101, \quad \dots\]
+
+    A regular expression is:
+    \[(01)^*1 + 0(10)^*1\]
+
+    \item[(d)] Regular expression for the language:
+
+    Strings that end at \( q_3 \), matching:
+    \[(01)^*1 + 0(10)^*1\]
+
+\end{itemize}
+
+\textbf{4.4.1}
+
+\begin{itemize}
+    \item (a) To find distinguishable state pairs, we first marked all pairs where one state is accepting (D) and the other is not. Then, we used transitions to mark more pairs based on previously marked ones.
+    \item The equivalent state pairs are: (A, B) and (F, G).
+    \item (b) After grouping equivalent states, we get the following minimized DFA:
+
+    \begin{center}
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+        State & 0 & 1 & Final? \\
+        \hline
+        \textnormal{[A, B]} & \textnormal{[A, B]} & \textnormal{[A, B]} & No \\
+        \textnormal{[C]} & \textnormal{[D]} & \textnormal{[A, B]} & No \\
+        \textnormal{[D]} & \textnormal{[D]} & \textnormal{[A, B]} & Yes \\
+        \textnormal{[E]} & \textnormal{[D]} & \textnormal{[F, G]} & No \\
+        \textnormal{[F, G]} & \textnormal{[F, G]} & \textnormal{[F, G]} & No \\
+        \textnormal{[H]} & \textnormal{[F, G]} & \textnormal{[D]} & No \\
+        \hline
+    \end{tabular}
+    \end{center}
+\end{itemize}
+
+
+\textbf{4.4.2}
+
+\begin{itemize}
+    \item (a) We marked all pairs where one state is accepting (C, F, I) and the other is not, and used transitions to find more distinguishable pairs.
+    \item The only equivalent pair is: (G, H).
+    \item (b) The minimized DFA has the following transitions:
+
+    \begin{center}
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+        State & 0 & 1 & Final? \\
+        \hline
+        \textnormal{[A]} & \textnormal{[B]} & \textnormal{[E]} & No \\
+        \textnormal{[B]} & \textnormal{[C]} & \textnormal{[F]} & No \\
+        \textnormal{[C]} & \textnormal{[D]} & \textnormal{[G, H]} & Yes \\
+        \textnormal{[D]} & \textnormal{[E]} & \textnormal{[G, H]} & No \\
+        \textnormal{[E]} & \textnormal{[F]} & \textnormal{[I]} & No \\
+        \textnormal{[F]} & \textnormal{[G, H]} & \textnormal{[B]} & Yes \\
+        \textnormal{[G, H]} & \textnormal{[I]} & \textnormal{[B]} & No \\
+        \textnormal{[I]} & \textnormal{[A]} & \textnormal{[E]} & Yes \\
+        \hline
+    \end{tabular}
+    \end{center}
+\end{itemize}
+
+
+\subsection*{Reading Summary and Questions}
+Section 4.4 covers how to determine if two deterministic finite automata (DFAs) are equivalent and how to simplify a DFA by minimizing it. Two DFAs are considered equivalent if they accept exactly the same set of strings, 
+meaning they recognize the same language. One way to test this is by creating a new DFA that accepts only the strings where the original two DFAs disagree—if this new DFA accepts nothing, then the two are equivalent. 
+The section also introduces a process for minimizing a DFA by merging states that behave the same for all inputs. This is done using the table-filling algorithm, which helps identify indistinguishable states—those that can’t 
+be told apart by any string. Once the indistinguishable states are grouped, a new, smaller DFA is created that still accepts the same language. This minimized DFA is guaranteed to be the smallest possible version for that language 
+and is unique up to state naming. Minimizing DFAs is helpful in real-world applications like text processing, search algorithms, and compiler design because it makes the automaton more efficient. Overall, Section 4.4 provides 
+practical techniques for comparing and simplifying DFAs while ensuring their behavior stays the same.
+
+My question this week was asking if there are any situations where minimizing a NFA would it result in changing the language that is recognized?
 
 \section{Synthesis}
 
