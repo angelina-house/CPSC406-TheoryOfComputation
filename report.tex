@@ -779,6 +779,92 @@ practical techniques for comparing and simplifying DFAs while ensuring their beh
 
 My question this week was asking if there are any situations where minimizing a NFA would it result in changing the language that is recognized?
 
+
+\subsection{Week 7}
+
+\subsection*{Notes}
+
+\subsection*{Homework}
+{Turing Machine Code (in 5-tuple format):
+
+\begin{lstlisting}
+(q_even, 0, 0, R, q_odd)
+(q_even, 1, 1, R, q_even)
+(q_even, _, _, R, q_accept)
+(q_odd, 0, 0, R, q_even)
+(q_odd, 1, 1, R, q_odd)
+(q_odd, _, _, R, q_reject)
+\end{lstlisting}
+
+\paragraph{Transition Table:}
+
+\begin{center}
+\begin{tabular}{@{}lllll@{}}
+Current State & Read Symbol & Write Symbol & Move & Next State \\
+\texttt{q\_even} & 0 & 0 & R & \texttt{q\_odd} \\
+\texttt{q\_even} & 1 & 1 & R & \texttt{q\_even} \\
+\texttt{q\_even} & \_ & \_ & R & \texttt{q\_accept} \\
+\texttt{q\_odd}  & 0 & 0 & R & \texttt{q\_even} \\
+\texttt{q\_odd}  & 1 & 1 & R & \texttt{q\_odd} \\
+\texttt{q\_odd}  & \_ & \_ & R & \texttt{q\_reject} \\
+\end{tabular}
+\end{center}
+
+\subsection*{Reading Summary and Questions}
+
+Sections 8.1 and 8.2 explore the limits of what computers are capable of. Section 8.1 introduces the idea of undecidable problems—problems that no program can solve 
+for every possible input. One example they use is checking whether a program prints “hello, world.” Even though it sounds simple, there’s no general algorithm that 
+can do this for all cases without running into logical contradictions. The section also talks about reductions, where you show that one problem is at least as hard as 
+another, which helps prove when something is truly undecidable. Section 8.2 introduces the Turing Machine, a basic but powerful model of computation. It has a tape, a 
+read/write head, and a set of rules that determine its behavior. Despite how simple it looks, a Turing Machine can simulate anything a real computer can do. This idea 
+is the basis of the Church-Turing Thesis, which says that if something can be computed at all, a Turing Machine can do it. These sections are important because they lay 
+out how we define what’s computable and what isn’t—and show that there are problems no computer will ever be able to solve, no matter how advanced technology gets.
+
+My question this week was how has AI affected the Turing machine and will it ever replace it?
+
+\subsection{Week 8}
+
+\subsection*{Notes}
+
+\subsection*{Homework}
+\subsubsection*{Exercise 1: Decidability Classifications}
+
+\begin{enumerate}
+    \item $L_1 = \{ M \mid M \text{ halts on itself} \}$ \\
+    \textbf{RE:} Yes \quad \textbf{Decidable:} No \quad \textbf{co-RE:} No
+
+    \item $L_2 = \{(M, w) \mid M \text{ halts on input } w \}$ \\
+    \textbf{RE:} Yes \quad \textbf{Decidable:} No \quad \textbf{co-RE:} No
+
+    \item $L_3 = \{(M, w, k) \mid M \text{ halts on } w \text{ in } \leq k \text{ steps} \}$ \\
+    \textbf{Decidable:} Yes
+\end{enumerate}
+
+\vspace{1em}
+
+\subsubsection*{Exercise 2: True/False Decidability Questions}
+
+\begin{enumerate}
+    \item If $L_1$ and $L_2$ are decidable, then $L_1 \cup L_2$ is decidable. \textbf{True}
+    \item If $L$ is decidable, then $\overline{L}$ is decidable. \textbf{True}
+    \item If $L$ is decidable, then $L^*$ is decidable. \textbf{True}
+    \item If $L_1$, $L_2$ are RE, then $L_1 \cup L_2$ is RE. \textbf{True}
+    \item If $L$ is RE, then $\overline{L}$ is RE. \textbf{False}
+    \item If $L$ is RE, then $L^*$ is RE. \textbf{True}
+\end{enumerate}
+
+\subsection*{Reading Summary and Questions}
+Sections 9.1 and 9.2 explore the idea that some problems are beyond what computers can solve, even in theory. In Section 9.1, the book introduces 
+a language called $L_d$, which is not recursively enumerable. That means no Turing machine can recognize every string in this language. The authors 
+use a technique called diagonalization (similar to a famous proof in math by Cantor) to show this. They list all possible Turing machines and their 
+inputs, then build a language that avoids every machine on its own input. Trying to create a machine that accepts exactly this language leads to a 
+contradiction, which proves that $L_d$ is truly unrecognizable. Section 9.2 shifts to the universal language $L_u$, which contains all valid program/input 
+pairs where the program accepts the input. Unlike $L_d$, this language is recursively enumerable—a Turing machine can recognize it—but it’s still undecidable. 
+That means there’s no algorithm that can always say yes or no in a finite amount of time. If the answer is “yes,” the machine will eventually accept it, but 
+if it’s “no,” it might run forever. These sections show that some problems can be partially solved, while others are completely out of reach.
+
+This week I asked if some problems are only semi solvable, is there a way to identify patterns or conditions that help us guess when a solution could exist?
+
 \section{Synthesis}
 
 \section{Evidence of Participation}
