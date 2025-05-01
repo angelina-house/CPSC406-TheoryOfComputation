@@ -865,6 +865,101 @@ if it’s “no,” it might run forever. These sections show that some problems
 
 This week I asked if some problems are only semi solvable, is there a way to identify patterns or conditions that help us guess when a solution could exist?
 
+\subsection{Week 9}
+
+\subsection*{Notes}
+
+\subsection*{Homework}
+\textbf{Exercise 1: Order of Growth}
+
+Order the following functions from slowest to fastest:
+
+\begin{itemize}
+    \item[(a)] $2^{2^n}$
+    \item[(b)] $e^{\log n} = n$
+    \item[(c)] $\log n$
+    \item[(d)] $e^n$
+    \item[(e)] $e^{2\log n} = n^2$
+    \item[(f)] $\log(\log n)$
+    \item[(g)] $2^n$
+    \item[(h)] n!
+\end{itemize}
+
+\textit{Solution:} After simplifying and comparing growth rates, we get:
+\[
+\log(\log n) < \log n < n < n^2 < 2^n < n! < e^n < 2^{2^n}
+\]
+
+\vspace{1em}
+\textbf{Exercise 2: Big-O Properties}
+
+Given $f, g, h : \mathbb{N} \to \mathbb{R}_{\geq 0}$:
+
+\begin{enumerate}
+    \item $f \in \mathcal{O}(f)$.
+    \item $\mathcal{O}(c \cdot f) = \mathcal{O}(f)$ for $c > 0$.
+    \item If $f(n) \leq g(n)$ for large $n$, then $\mathcal{O}(f) \subseteq \mathcal{O}(g)$.
+    \item If $\mathcal{O}(f) \subseteq \mathcal{O}(g)$, then $\mathcal{O}(f+h) \subseteq \mathcal{O}(g+h)$.
+    \item If $h(n) > 0$ and $\mathcal{O}(f) \subseteq \mathcal{O}(g)$, then $\mathcal{O}(f \cdot h) \subseteq \mathcal{O}(g \cdot h)$.
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Exercise 3: Polynomial and Logarithmic Growth}
+
+\begin{enumerate}
+    \item If $j \leq k$, then $\mathcal{O}(n^j) \subseteq \mathcal{O}(n^k)$.
+    \item $\mathcal{O}(n^j + n^k) \subseteq \mathcal{O}(n^k)$.
+    \item $\mathcal{O}\left(\sum_{i=0}^k a_i n^i\right) = \mathcal{O}(n^k)$.
+    \item $\mathcal{O}(\log n) \subseteq \mathcal{O}(n)$.
+    \item $\mathcal{O}(n \log n) \subseteq \mathcal{O}(n^2)$.
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Exercise 4: Comparing Growth Rates}
+
+\begin{enumerate}
+    \item $\mathcal{O}(\sqrt{n}) \subseteq \mathcal{O}(n)$.
+    \item $\mathcal{O}(n^2) \subseteq \mathcal{O}(2^n)$.
+    \item $\mathcal{O}(\log n) \subseteq \mathcal{O}(\log^2 n)$.
+    \item $\mathcal{O}(2^n) \subseteq \mathcal{O}(3^n)$.
+    \item $\mathcal{O}(\log_2 n) = \mathcal{O}(\log_3 n)$.
+\end{enumerate}
+
+\vspace{1em}
+\textbf{Exercise 5: Sorting Algorithm Comparisons}
+
+\textit{Bubble Sort vs. Insertion Sort:}
+\begin{itemize}
+    \item Worst-case: $\mathcal{O}(n^2)$
+    \item Average-case: $\mathcal{O}(n^2)$
+    \item Best-case: $\mathcal{O}(n)$ (for insertion sort)
+\end{itemize}
+
+\textit{Insertion Sort vs. Merge Sort:}
+\begin{itemize}
+    \item Insertion sort: $\mathcal{O}(n^2)$ worst/avg, $\mathcal{O}(n)$ best.
+    \item Merge sort: $\mathcal{O}(n \log n)$ in all cases.
+\end{itemize}
+
+\textit{Merge Sort vs. Quick Sort:}
+\begin{itemize}
+    \item Quick sort: $\mathcal{O}(n^2)$ worst, $\mathcal{O}(n \log n)$ avg/best.
+    \item Merge sort: consistently $\mathcal{O}(n \log n)$.
+\end{itemize}
+
+\noindent In practice, quick sort tends to be faster due to better memory/cache performance, even though merge sort has a better worst-case guarantee.
+
+\subsection*{Reading Summary and Questions}
+Sections 10.1 to 10.3 explore the idea that some problems are just too hard to solve efficiently, even with powerful computers. It starts by explaining the 
+difference between the classes P and NP—P includes problems we can solve quickly, while NP includes problems where we can quickly check a solution, even if 
+finding it might take forever. Most people believe P does not equal NP, but it hasn’t been proven. The SAT problem is introduced as the first problem shown to be NP-complete, 
+meaning it’s as hard as any problem in NP. Cook’s Theorem proves this by showing that any problem in NP can be translated into SAT. Then, the book focuses on 
+more specific versions of SAT, like CNF-SAT and 3SAT, where formulas are written in a standardized way. Even though 3SAT seems more limited, it’s still NP-complete 
+and super useful when proving other problems are hard too. Overall, these sections explain how computer scientists figure out which problems are “hard” in a formal 
+way, and why some problems, no matter how important, probably won’t ever have a fast, general solution.
+
+My question this week was asking if there are other ways to classify problems that dont fall into P or NP other then polynomial time reductions?
+
 \section{Synthesis}
 
 \section{Evidence of Participation}
