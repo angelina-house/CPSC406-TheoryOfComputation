@@ -960,6 +960,98 @@ way, and why some problems, no matter how important, probably won’t ever have 
 
 My question this week was asking if there are other ways to classify problems that dont fall into P or NP other then polynomial time reductions?
 
+\subsection{Week 10}
+
+\subsection*{Notes}
+
+\subsection*{Homework}
+\begin{enumerate}
+    \item \textbf{Exercise 1: Convert the following formulas to CNF}
+    \begin{enumerate}
+        \item $\varphi_1 = \neg((a \land b) \lor (\neg c \land d))$\\
+        Using De Morgan's Laws:
+        \[
+        \neg((a \land b) \lor (\neg c \land d)) = \neg(a \land b) \land \neg(\neg c \land d) = (\neg a \lor \neg b) \land (c \lor \neg d)
+        \]
+        Final CNF: $(\neg a \lor \neg b) \land (c \lor \neg d)$
+
+        \item $\varphi_2 = \neg((p \lor q) \rightarrow (r \land \neg s))$\\
+        First rewrite implication:
+        \[
+        (p \lor q) \rightarrow (r \land \neg s) \equiv \neg(p \lor q) \lor (r \land \neg s)
+        \]
+        Now negate the entire expression:
+        \[
+        \neg(\neg(p \lor q) \lor (r \land \neg s)) = (p \lor q) \land (\neg r \lor s)
+        \]
+        Final CNF: $(p \lor q) \land (\neg r \lor s)$
+    \end{enumerate}
+
+    \item \textbf{Exercise 2: Determine satisfiability of the following formulas}
+    \begin{enumerate}
+        \item $\psi_1 = (a \lor \neg b) \land (\neg a \lor b) \land (\neg a \lor \neg b)$\\
+        Try $a = \text{false}, b = \text{false}$:
+        \[
+        \text{All three clauses are true.}
+        \]
+        \textbf{Conclusion:} Satisfiable.
+
+        \item $\psi_2 = (\neg p \lor q) \land (\neg q \lor r) \land \neg(\neg p \lor r)$\\
+        $\neg(\neg p \lor r) \equiv p \land \neg r$\\
+        Combined: $(\neg p \lor q) \land (\neg q \lor r) \land p \land \neg r$\\
+        Leads to contradiction on $q$: cannot satisfy both $q$ and $\neg q$ simultaneously.\\
+        \textbf{Conclusion:} Not satisfiable.
+
+        \item $\psi_3 = (x \lor y) \land (\neg x \lor y) \land (x \lor \neg y) \land (\neg x \lor \neg y)$\\
+        Try all possible assignments of $(x, y)$. None satisfy all clauses.\\
+        \textbf{Conclusion:} Not satisfiable.
+    \end{enumerate}
+
+    \item \textbf{Exercise 3: Encoding Sudoku constraints into Boolean formulas}
+    \begin{itemize}
+        \item \textbf{Variables:} For each cell $(i,j)$ and digit $d \in \{1,\dots,9\}$, define variable $X_{i,j,d}$ meaning cell $(i,j)$ has digit $d$.
+        \item \textbf{Cell constraints:} Each cell must contain exactly one digit:
+        \[
+        X_{i,j,1} \lor X_{i,j,2} \lor \cdots \lor X_{i,j,9}
+        \]
+        and for all $d \ne d'$: $\neg X_{i,j,d} \lor \neg X_{i,j,d'}$
+
+        \item \textbf{Row constraints:} Each digit appears exactly once per row:
+        \[
+        \bigvee_{j=1}^{9} X_{i,j,d}, \quad \text{for each } i, d
+        \]
+        and for all $j \ne k$: $\neg X_{i,j,d} \lor \neg X_{i,k,d}$
+
+        \item \textbf{Column constraints:} Each digit appears exactly once per column:
+        \[
+        \bigvee_{i=1}^{9} X_{i,j,d}, \quad \text{for each } j, d
+        \]
+        and for all $i \ne k$: $\neg X_{i,j,d} \lor \neg X_{k,j,d}$
+
+        \item \textbf{Block constraints:} Each digit appears exactly once in each $3 \times 3$ block.
+        \[
+        \text{Similar to row/column constraints, applied to blocks.}
+        \]
+    \end{itemize}
+\end{enumerate}
+
+\subsection*{Reading Summary and Questions}
+Sections 10.1 and 10.2 address fundamental concepts in computational complexity, focusing on how we evaluate 
+the difficulty of solving different classes of problems. Section 10.1 introduces the complexity classes P and NP. 
+Problems in P can be solved efficiently using a deterministic algorithm that runs in polynomial time. In contrast, 
+problems in NP may not be easy to solve, but if a solution is provided, it can be verified efficiently. A central 
+and unresolved question in theoretical computer science is whether P equals NP. The section also introduces the 
+concept of NP-complete problems—these are the most difficult problems within NP. If any one of them can be solved 
+efficiently, then all problems in NP can be as well. Section 10.2 focuses on the satisfiability problem (SAT), which 
+asks whether there exists a truth assignment to variables in a Boolean formula that makes the formula true. SAT 
+holds particular significance as it was the first problem proven to be NP-complete, through Cook’s Theorem. It serves 
+as a foundational reference for proving the NP-completeness of many other problems. Together, these sections establish 
+a framework for classifying computational problems and highlight the importance of understanding problem complexity 
+in computer science.
+
+The question I asked this week was if there were any real life examples of NP-complete problems and how they are used in practice.
+
+
 \section{Synthesis}
 
 \section{Evidence of Participation}
