@@ -1051,6 +1051,115 @@ in computer science.
 
 The question I asked this week was if there were any real life examples of NP-complete problems and how they are used in practice.
 
+\subsection*{Week 11}
+
+\subsection*{Notes}
+
+\subsection*{Homework}
+\textbf{Exercise 1: Maximal Flow \& Minimal Cut}
+
+\begin{enumerate}
+    \item \textbf{Maximal Flow using Ford-Fulkerson Algorithm}
+
+    We identify augmenting paths and increment flow step-by-step:
+
+    \begin{itemize}
+        \item Path: \( s \rightarrow a \rightarrow d \rightarrow t \): bottleneck = 8
+        \item Path: \( s \rightarrow b \rightarrow d \rightarrow t \): bottleneck = 2
+        \item Path: \( s \rightarrow b \rightarrow d \rightarrow c \rightarrow t \): bottleneck = 6
+    \end{itemize}
+
+    Total flow = \( 8 + 2 + 6 = 16 \). Thus, the maximum flow is:
+    \[
+    \boxed{16}
+    \]
+
+    \item \textbf{Minimal Cut}
+
+    After running Ford-Fulkerson, we determine reachable nodes from source \( s \) in the residual graph: \\
+    Reachable set: \( S = \{s, a, b\} \) \quad and \quad \( T = \{c, d, t\} \)
+
+    Cut edges:
+    \begin{itemize}
+        \item \( a \rightarrow d \): capacity = 8
+        \item \( b \rightarrow d \): capacity = 8
+    \end{itemize}
+
+    Total cut capacity = \( 8 + 8 = \boxed{16} \)
+
+    \item \textbf{Is the Maximal Flow Unique?}
+
+    No, the maximal flow is not necessarily unique. Multiple different flow assignments can achieve the same total flow.
+\end{enumerate}
+
+
+\textbf{Exercise 2: An Unknown Algorithm}
+
+\begin{enumerate}
+    \item \textbf{What value, depending on \( n \), does the algorithm return?}
+
+    We analyze the algorithm by counting the number of times the innermost instruction \texttt{r := r + 1} executes.
+
+    \begin{itemize}
+        \item Outer loop: \( k = 1 \) to \( n-1 \)
+        \item Middle loop: \( \ell = k+1 \) to \( n \)
+        \item Inner loop: \( m = 1 \) to \( \ell \)
+    \end{itemize}
+
+    The total increments of \( r \) is:
+
+    \[
+    r = \sum_{k=1}^{n-1} \sum_{\ell=k+1}^{n} \sum_{m=1}^{\ell} 1 = \sum_{k=1}^{n-1} \sum_{\ell=k+1}^{n} \ell
+    \]
+
+    We simplify the expression:
+
+    \[
+    \sum_{k=1}^{n-1} \left( \sum_{\ell=k+1}^{n} \ell \right)
+    = \sum_{k=1}^{n-1} \left( \frac{n(n+1)}{2} - \frac{k(k+1)}{2} \right)
+    \]
+
+    \[
+    = \frac{n(n+1)(n-1)}{2} - \frac{1}{2} \sum_{k=1}^{n-1} k(k+1)
+    \]
+
+    Using the identity:
+    \[
+    \sum_{k=1}^{n-1} k(k+1) = \frac{(n-1)n(n+1)}{3}
+    \]
+
+    We obtain:
+    \[
+    r = \frac{n(n+1)(n-1)}{2} - \frac{(n-1)n(n+1)}{6} = \frac{(n-1)n(n+1)}{3}
+    \]
+
+    \textbf{Final result:}
+    \[
+    \boxed{r = \frac{n(n+1)(n-1)}{3}}
+    \]
+
+    \item \textbf{Estimate the worst-case running time in Big-O notation.}
+
+    The innermost operation is executed \( \frac{n(n+1)(n-1)}{3} \in \Theta(n^3) \), so the worst-case time complexity is:
+
+    \[
+    \boxed{O(n^3)}
+    \]
+\end{enumerate}
+
+\subsection*{Reading Summary and Questions}
+
+Sections 14.1 through 14.4 cover how flow works in networks, starting with transport networks,directed graphs where each edge has a capacity, and 
+flow moves from a source to a sink without exceeding those limits. The main goal is to figure out the maximum flow you can push through the network. 
+Section 14.2 introduces the Max-Flow Min-Cut Theorem, which says the maximum flow equals the smallest total capacity of edges you’d need to cut to 
+separate the source from the sink. It also explains the Ford-Fulkerson algorithm, which finds paths that can carry more flow and updates them until 
+no more improvements can be made. Section 14.3 looks at algorithm performance, pointing out that how you pick paths affects efficiency. It introduces 
+the Edmonds-Karp algorithm, which uses breadth-first search to reliably find max flow in polynomial time. Section 14.4 expands things to the multicommodity 
+flow problem, where multiple flows (each with their own source and sink) have to share the same network. The tricky part is making sure the combined flow 
+doesn’t exceed any edge’s capacity, which often requires using linear programming. Together, these sections lay out both the core ideas and practical tools 
+for solving complex network flow problems.
+
+My question this week was about the real life applications of the Max-Flow Min-Cut Theorem and Ford-Fulkerson algorithm and the benefits and drawbacks of each.
 
 \section{Synthesis}
 
