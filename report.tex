@@ -86,6 +86,7 @@
 \section{Week by Week}\label{homework}
 
 \subsection{Week 1}
+\smallskip
 
 \subsubsection*{Notes}
 
@@ -93,50 +94,46 @@ In week one we were introduced to basic automata therory and given multiple exam
 Our main example was one of a parking meter where we were introduced to states, transitions, and final states. 
 We also went over naming specifications, word lists and equations, and finite automata. 
   
+% --- Week 1 Homework: Updated Automaton Descriptions ---
 \subsubsection*{Homework}
 
 \textbf{Question 1:} Characterize all the accepted words (i.e., describe exactly those words that get recognized).
 \smallskip
 
-We can first start characterizing the accepted words by looking at the given graph and gaining an understanding of the automaton. 
-In this automaton there we have a coin machine which needs 25 cent and can only take 5 and 10 cent coins. We can see that the machine will accept the word if the sum of the coins is 25 cents.
-With this we can characterize the accepted words as follows:
+Examining the assignment's automaton image, we see a coin-operated vending machine that accepts only nickels (5¢) and dimes (10¢), and dispenses the product once 15¢ is inserted. The states represent the cumulative total: 0¢, 5¢, 10¢, and 15¢ (accepting). The machine accepts a word if the sum of coins is exactly 15¢.
+
+The accepted words are all possible sequences of 5's and 10's that sum to 15:
 \[
 \begin{aligned}
-    &5 \; 5 \; 5 \; 5 \; 5 \\
-    &5 \; 5 \; 5 \; 10 \\
-    &5 \; 5 \; 10 \; 5 \\
-    &5 \; 10 \; 5 \; 5 \\
-    &10 \; 5 \; 5 \; 5 \\
-    &10 \; 10 \; 5 \\
-    &10 \; 5 \; 10 \\
-    &5 \; 10 \; 10
+    &5\,5\,5 \\
+    &5\,10 \\
+    &10\,5
 \end{aligned}
 \]
+That is, any word over \(\{5, 10\}\) whose sum is exactly 15, in any order. No extra coins are accepted.
 
 \bigskip
 
 \textbf{Question 2:} Characterize all the accepted words. Can you describe them via a regular expression?
 
-We can first start charaterizing the accepted words by understanding the graph, states, and transitions. In this graph, pay moves the turnstile from locked to unlocked, push turns the turnstile from unlocked
-to locked, if the turnstile is already unlocked a pay occurs then it remains unlocked and if the turnstile is locked and a push is used then nothing happens. With this understanding we can formulate that atleast 
-one pay is needed to unlock the turnstile, any number of pay's can happen while the turnstile is unlocked and a push after a pay locked the turnstile making it need another pay to unlock again.
-With this we can characterize the accepted words as follows:
+From the automaton image, this is a turnstile with two states: \texttt{Locked} and \texttt{Unlocked}. The actions are \texttt{pay} and \texttt{push}. The automaton starts in the Locked state. \texttt{pay} in Locked moves to Unlocked; \texttt{push} in Unlocked returns to Locked. Other actions leave the state unchanged.
 
+Accepted words are those that end in the Unlocked state. That is, sequences where the number of \texttt{pay}'s is greater than the number of \texttt{push}'s, and every prefix has at least as many \texttt{pay}'s as \texttt{push}'s.
+
+Some accepted words:
 \[
 \begin{aligned}
     &\texttt{pay} \\
     &\texttt{pay pay} \\
-    &\texttt{pay pay pay} \\
     &\texttt{pay push pay} \\
     &\texttt{pay pay push pay} \\
-    &\texttt{pay pay pay push pay} \\
 \end{aligned}
 \]
-Overall, the pattern follows:
+In general, the language is described by the regular expression:
 \[
-\texttt{pay (push pay)*}
+\texttt{pay (push pay)^*}
 \]
+That is, a \texttt{pay} followed by zero or more repetitions of \texttt{push pay}.
 
 \bigskip
 
@@ -147,6 +144,7 @@ There was no readings or questions for this week.
 \bigskip
 
 \subsection{Week 2}
+\smallskip
 
 
 \subsubsection*{Notes}
@@ -218,167 +216,48 @@ they play an essential role in many areas of computer science, especially in rec
 My questions this week was regarding the complexities of finite automata. It was "Is there a point where an automata gets too complicated to the point where its not the best option anymore? If so, is there any alternatives to the automaton that might work better in this situation?"
 
 \subsection{Week 3}
-
-\subsubsection*{Notes}
-
-\subsubsection*{Homework}
-
-Homework two include two lab questions from our week two lab. The labs focus on developing and altering a DFA from code as well as understanding the varuous actions that can be done to them. 
-In the first question, we are asked to implement the run function as well as define the $A_1$ and $A_2$ from the imagaes given. In the following question, we are asked to consider a new automaton $A_3$ and implement a new refuse function. This is all done within three different python files, dfa.py, dfa_ex01.py and dfa_ex03.py.
-
 \smallskip
 
 
-\textbf{dfa.py:}
-\begin{lstlisting}
-  # dfa.py
-  class DFA:
-      def __init__(self, Q, Sigma, delta, q0, F):
-          self.Q = Q  # Set of states
-          self.Sigma = Sigma  # Alphabet
-          self.delta = delta  # Transition function
-          self.q0 = q0  # Initial state
-          self.F = F  # Accepting states
-  
-      def __repr__(self):
-          return f"DFA({self.Q},\n\t{self.Sigma},\n\t{self.delta},\n\t{self.q0},\n\t{self.F})"
-  
-      def run(self, w):
-          current_state = self.q0
-          for symbol in w:
-              if symbol not in self.Sigma:
-                  return False
-              current_state = self.delta.get((current_state, symbol))
-              if current_state is None:
-                  return False
-          return current_state in self.F  # Accept if in accepting state
-  
-      def refuse(self):
-          # new dfa that refuses input
-          return DFA(self.Q, self.Sigma, self.delta, self.q0, set())  
-  
-  # Example DFA 
-  if __name__ == "__main__":
-      Q = {'q0', 'q1'}
-      Sigma = {'0', '1'}
-      delta = {
-          ('q0', '0'): 'q0',
-          ('q0', '1'): 'q1',
-          ('q1', '0'): 'q1',
-          ('q1', '1'): 'q0'
-      }
-      q0 = 'q0'  # Initial state
-      F = {'q1'}  # Accepting state
-  
-      dfa = DFA(Q, Sigma, delta, q0, F)
-      print(dfa.run('101'))  # false
-      print(dfa.run('100'))  # true
+\subsubsection*{Homework}
 
-***** dfa_ex01.py: *****
+% NOTE: Code moved and overview for Week 3 lab questions
+All code related to this lab has been placed in the \texttt{py-automata/} directory of the repository as required.
 
-  from dfa import DFA  
-  
-  def generate_words():
-      words = [""]  
-      alphabet = ['a', 'b']
-      
-      # Generate words 
-      for first in alphabet:
-          words.append(first)
-          for second in alphabet:
-              words.append(first + second)
-              for third in alphabet:
-                  words.append(first + second + third)
-      
-      return words
-  
-  def __main__():
-      # Define DFA A1
-      A1 = DFA(
-          Q={1, 2, 3, 4},
-          Sigma={'a', 'b'},
-          delta={
-              (1, 'a'): 2, (1, 'b'): 4,
-              (2, 'a'): 2, (2, 'b'): 3,
-              (3, 'a'): 3, (3, 'b'): 3,
-              (4, 'a'): 4, (4, 'b'): 4
-          },
-          q0=1,
-          F={3}
-      )
-  
-      # Define DFA A2
-      A2 = DFA(
-          Q={1, 2, 3},
-          Sigma={'a', 'b'},
-          delta={
-              (1, 'a'): 2, (1, 'b'): 1,
-              (2, 'a'): 3, (2, 'b'): 1,
-              (3, 'a'): 3, (3, 'b'): 3
-          },
-          q0=1,
-          F={3}
-      )
-  
-      words = generate_words()
-      automata = [A1, A2]
-  
-      # Test words on automata
-      for X in automata:
-          # print(f"{X.__repr__()}") # prints DFA representation
-          for w in words:
-              print(f"{w}: {X.run(w)}") # prints true or false
-          print("\n")
-  
-  __main__()
+Homework two includes two lab questions from our week two lab. The labs focus on developing and altering a DFA from code as well as understanding the various actions that can be done to them. 
+In the first question, we are asked to implement the \texttt{run} function as well as define the $A_1$ and $A_2$ automata from the images given. In the following question, we are asked to consider a new automaton $A_3$ and implement a new \texttt{refuse} function. 
+All code related to this lab has been placed in the \texttt{py-automata/} directory of the repository as required.
 
-***** dfa_ex03.py: *****
+\smallskip
 
-  from dfa import DFA 
-  
-  def generate_words():
-      words = [""]
-      alphabet = ['a', 'b']
-      
-      for first in alphabet:
-          words.append(first)
-          for second in alphabet:
-              words.append(first + second)
-              for third in alphabet:
-                  words.append(first + second + third)
-      
-      return words
-  
-  def __main__():
-      # Define DFA A 
-      A = DFA(
-          Q={1, 2, 3, 4},  
-          Sigma={'a', 'b'},  
-          delta={  
-              (1, 'a'): 2, (1, 'b'): 4,
-              (2, 'a'): 3, (2, 'b'): 4,
-              (3, 'a'): 3, (3, 'b'): 3,
-              (4, 'a'): 2, (4, 'b'): 4
-          },
-          q0=1,  # Initial state
-          F={3, 4}  # Accepting states
-      )
-  
-      # Define DFA A0 (refuse)
-      A0 = A.refuse()
-  
-      words = generate_words()
-      automata = [A, A0]
-  
-      # Test words on automata
-      for X in automata:
-          # print(f"{X.__repr__()}") # Prints DFA representation
-          for w in words:
-              print(f"{w}: {X.run(w)}")  # Prints True or False
-          print("\n")
-  
-  __main__()
-  \end{lstlisting}
+\textbf{Code Overview:}
+\begin{itemize}
+    \item \texttt{dfa.py}: Contains the \texttt{DFA} class with methods to initialize a DFA, run an input word, and create a new DFA that refuses all input.
+    \item \texttt{dfa\_ex01.py}: Defines automata $A_1$ and $A_2$, generates all words up to length 3 from the alphabet $\{a, b\}$, and tests each word on both automata.
+    \item \texttt{dfa\_ex03.py}: Defines automaton $A$, uses the refuse method to create $A_0$ (a version of $A$ that accepts no strings), and tests both on generated words.
+\end{itemize}
+
+\subsubsection*{Exercise 2.2.4}
+
+\textbf{(a) DFA for all strings ending in 00:}
+
+To construct this DFA, we define three states:
+\begin{itemize}
+    \item $q_0$: start state (haven't seen any 0 yet)
+    \item $q_1$: seen one 0
+    \item $q_2$: seen two 0s (i.e., ends in 00) — accepting state
+\end{itemize}
+
+Transitions:
+\begin{itemize}
+    \item From $q_0$: on 0 go to $q_1$, on 1 stay in $q_0$
+    \item From $q_1$: on 0 go to $q_2$, on 1 go to $q_0$
+    \item From $q_2$: on 0 stay in $q_2$, on 1 go to $q_0$
+\end{itemize}
+
+\textbf{Accepting state:} $q_2$
+
+Parts (b) and (c) can be constructed similarly using state tracking for three 0’s or the substring 011.
 
 \subsubsection*{Reading Summary and Questions}
 
@@ -398,8 +277,7 @@ This week I was curious about the limits of a DFA. My question was "The book emp
 be able to process multiple strings at one time? Would it make the DFA simpler or more complex and at what point would we have to get quantum computing involved?"
 
 \subsection{Week 4}
-
-\subsection*{Notes}
+\smallskip
 
 
 \subsection*{Homework}
@@ -478,6 +356,50 @@ Language of \( \mathcal{A} \):
 
 \( L(\mathcal{A}) \) is regular because regular languages are closed under intersection. Since \( L(\mathcal{A}^{(1)}) \) and \( L(\mathcal{A}^{(2)}) \) are regular, their intersection \( L(\mathcal{A}) \) is also regular.
 
+\smallskip
+
+\textbf{Concrete Construction Example:}
+
+Suppose \( \mathcal{A}^{(1)} \) has states \( \{q_1, q_2, q_3\} \), and \( \mathcal{A}^{(2)} \) has states \( \{p_1, p_2, p_3\} \). Then the product automaton \( \mathcal{A} \) will have states formed from all combinations of these: \( (q_i, p_j) \) for each \( i, j \).
+
+For instance, one transition might look like this:
+\[
+\delta((q_1, p_1), a) = (\delta^{(1)}(q_1, a), \delta^{(2)}(p_1, a)) = (q_2, p_3)
+\]
+
+The initial state of \( \mathcal{A} \) is \( (q_1, p_1) \) assuming both start from their respective first states. Accepting states are any pairs \( (q_i, p_j) \) such that both \( q_i \in F^{(1)} \) and \( p_j \in F^{(2)} \).
+
+This construction explicitly defines the state space, transition function, start state, and accepting states of the product automaton.
+
+
+\bigskip
+
+\subsubsection*{Exercise 2.2.7}
+
+Let $A$ be a DFA and $q$ a particular state of $A$ such that $\delta(q, a) = q$ for all input symbols $a \in \Sigma$. We are to show by induction on the length of the input $w$ that for all input strings $w$, $\hat{\delta}(q, w) = q$.
+
+\textbf{Base Case:} Let $|w| = 0$. Then $w = \varepsilon$ (the empty string), and by the definition of the extended transition function:
+\[
+\hat{\delta}(q, \varepsilon) = q
+\]
+So the base case holds.
+
+\textbf{Inductive Step:} Assume the inductive hypothesis: for some string $w$ of length $n$, $\hat{\delta}(q, w) = q$. We want to show that for any symbol $a \in \Sigma$, $\hat{\delta}(q, wa) = q$.
+
+Using the definition of the extended transition function:
+\[
+\hat{\delta}(q, wa) = \delta(\hat{\delta}(q, w), a)
+\]
+By the inductive hypothesis, $\hat{\delta}(q, w) = q$, so:
+\[
+\hat{\delta}(q, wa) = \delta(q, a)
+\]
+But by the assumption in the problem, $\delta(q, a) = q$ for all $a \in \Sigma$, so:
+\[
+\hat{\delta}(q, wa) = q
+\]
+Thus, by induction, for all strings $w \in \Sigma^*$, $\hat{\delta}(q, w) = q$.
+
 \bigskip
 
 \subsection*{Reading Summary and Questions}
@@ -497,141 +419,116 @@ in these situations?
 
 
 \subsection{Week 5}
+\smallskip
 
-\subsection*{Notes}
-    \smallskip
  
- \subsection*{Homework}
+% --- Week 5 Homework: Revised Version ---
+\subsection*{Homework}
 
-\textbf{Question 1:} \\
-We can understand A as an NFA redefining the transition functions to allow for possible next states making it compatible with the power set of Q. If this is correctly done then the NFA interpretation from state q on input a will result in a non determinitic transitions to any state in the set. 
-For any given DFA $M = (Q, \Sigma, \delta, q_0, F)$, the corresponding NFA $M' = (Q', \Sigma, \delta', q_0', F')$ is defined as:
+\textbf{Question 1: DFA to NFA Translation}
+
+We define an NFA $M' = (Q', \Sigma, \delta', q_0', F')$ from a given DFA $M = (Q, \Sigma, \delta, q_0, F)$ as follows:
 \begin{itemize}
     \item $Q' = Q$
-    \item $\delta'(q, a) = \{\delta(q, a)\} \quad \forall q \in Q, a \in \Sigma$
+    \item $\delta'(q, a) = \{ \delta(q, a) \}$ for all $q \in Q, a \in \Sigma$
     \item $q_0' = q_0$
     \item $F' = F$
 \end{itemize}
-These descriptions ensure that the NFA accepts the same language as the original DFA since each transition remains deterministic.
-Since $\delta(q, a)$ in a DFA always returns a single state, the corresponding NFA transition function also only produces singleton sets.
-This means that for every input string $w \in \Sigma^*$, the sequence of transitions followed by the DFA is exactly the same as in the NFA.
-Because both automata start from the same initial state $q_0$ and have the same set of accepting states $F$, the set of accepted strings is identical.
 
-\smallskip
+This translation preserves the language, since every DFA is a valid NFA.
 
-\textbf{Question 2:} \\
-The given NFA A language can be described as
-\[
-L = \{ w \in \{a, b\}^* \mid w \text{ contains the substring "ab"} \}
-\]
-Any string in this language must contain at least one occurrence of the substring “ab” and the substring “ab” can appear anywhere in the string—at the beginning, middle, or end.
-A can be specified as:
+\bigskip
 
-\[
-A = (Q, \Sigma, \delta, q_0, F)
-\]
+\textbf{Question 2: Constructing $A^D$ from an NFA $A$}
 
-where:
+We define NFA $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ where:
 
 \begin{itemize}
-    \item \( Q = \{ q_0, q_1, q_2 \} \) is the set of states.
-    \item \( \Sigma = \{ a, b \} \) is the input alphabet.
-    \item \( q_0 \) is the initial state.
-    \item \( F = \{ q_0, q_1 \} \) is the set of accepting states.
-    \item \( \delta \) is the transition function defined as follows:
+    \item $Q = \{q_0, q_1, q_2, q_3\}$
+    \item $\Sigma = \{0,1\}$
+    \item $q_0$ is the initial state
+    \item $F = \{q_3\}$
+    \item Transition function $\delta$:
 \end{itemize}
 
-We compute the extended transition function \( \hat{\delta}(q_0, 10110) \) by processing the input string one symbol at a time:
+\begin{align*}
+\delta(q_0, 1) &= \{q_1\} \\
+\delta(q_1, 0) &= \{q_2\} \\
+\delta(q_2, 1) &= \{q_1\} \\
+\delta(q_2, 0) &= \{q_3\} \\
+\delta(q_1, 1) &= \{q_1\} \\
+\delta(q_3, 0) &= \{q_3\} \\
+\delta(q_3, 1) &= \{q_3\}
+\end{align*}
 
-\begin{enumerate}
-    \item \textbf{Start State:} \( q_0 \)
-    \item \textbf{Input 1:} From \( q_0 \), on input \( 1 \), transition to \( q_1 \).
-    \[
-    q_0 \xrightarrow{1} q_1
-    \]
-    \item \textbf{Input 0:} From \( q_1 \), on input \( 0 \), transition to \( q_2 \).
-    \[
-    q_1 \xrightarrow{0} q_2
-    \]
-    \item \textbf{Input 1:} From \( q_2 \), on input \( 1 \), transition to \( q_1 \).
-    \[
-    q_2 \xrightarrow{1} q_1
-    \]
-    \item \textbf{Input 1:} From \( q_1 \), on input \( 1 \), transition to \( q_1 \) (self-loop).
-    \[
-    q_1 \xrightarrow{1} q_1
-    \]
-    \item \textbf{Input 0:} From \( q_1 \), on input \( 0 \), transition to \( q_2 \).
-    \[
-    q_1 \xrightarrow{0} q_2
-    \]
-\end{enumerate}
+\bigskip
 
+\textbf{Computing $\hat{\delta}(q_0, 10110)$}
+
+\begin{itemize}
+    \item $q_0 \xrightarrow{1} q_1$
+    \item $q_1 \xrightarrow{0} q_2$
+    \item $q_2 \xrightarrow{1} q_1$
+    \item $q_1 \xrightarrow{1} q_1$
+    \item $q_1 \xrightarrow{0} q_2$
+\end{itemize}
+
+Final state: $q_2$ (not accepting)
+
+\bigskip
+
+\textbf{Computing $\hat{\delta}(q_0, 1100)$}
+
+There are two possible paths:
+\begin{itemize}
+    \item Path 1:
+        \begin{itemize}
+            \item $q_0 \xrightarrow{1} q_1$
+            \item $q_1 \xrightarrow{1} q_1$
+            \item $q_1 \xrightarrow{0} q_2$
+            \item $q_2 \xrightarrow{0} q_3$
+        \end{itemize}
+        Ends in $q_3$ (accepting)
+
+    \item Path 2:
+        \begin{itemize}
+            \item $q_0 \xrightarrow{1} q_1$
+            \item $q_1 \xrightarrow{1} q_1$
+            \item $q_1 \xrightarrow{0} q_2$
+            \item $q_2 \xrightarrow{0} q_2$
+        \end{itemize}
+        Ends in $q_2$ (not accepting)
+\end{itemize}
+
+Since one path ends in an accepting state, the word $1100$ is accepted by $\mathcal{A}$.
+
+\bigskip
+
+\textbf{Constructing DFA $\mathcal{A}^D$ (determinization)}
+
+Use the powerset construction:
+
+\begin{itemize}
+    \item States: $\mathcal{P}(Q)$ (all subsets of $Q$), such as $\emptyset$, $\{q_0\}$, $\{q_1, q_2\}$, etc.
+    \item Start state: $\{q_0\}$
+    \item Accepting states: any subset that contains $q_3$
+    \item Transition function: for any $S \subseteq Q$ and $a \in \Sigma$:
+    \[
+    \delta_D(S, a) = \bigcup_{q \in S} \delta(q, a)
+    \]
+\end{itemize}
+
+Example:
 \[
-\hat{\delta}(q_0, 10110) = q_2
+\delta_D(\{q_0\}, 1) = \delta(q_0, 1) = \{q_1\}
+\]
+\[
+\delta_D(\{q_1\}, 0) = \delta(q_1, 0) = \{q_2\}
 \]
 
-Computing Paths for \( v = 1100 \)
+And so on, iteratively building the transition table for all reachable subsets of states.
 
-We begin at the start state \( q_0 \) and process \( v = 1100 \) step by step.
-
-\begin{enumerate}
-    \item \textbf{Input 1:} From \( q_0 \), on input \( 1 \), transition to \( q_1 \).
-    \[
-    q_0 \xrightarrow{1} q_1
-    \]
-    \item \textbf{Input 1:} From \( q_1 \), on input \( 1 \), transition to \( q_1 \) (self-loop).
-    \[
-    q_1 \xrightarrow{1} q_1
-    \]
-    \item \textbf{Input 0:} From \( q_1 \), on input \( 0 \), transition to \( q_2 \).
-    \[
-    q_1 \xrightarrow{0} q_2
-    \]
-    \item \textbf{Input 0:} From \( q_2 \), on input \( 0 \), transition to \( q_3 \).
-    \[
-    q_2 \xrightarrow{0} q_3
-    \]
-\end{enumerate}
-
-\textbf{Final State for \( v = 1100 \):} \( q_3 \) (accepting state)
-
-Computing Paths for \( w = 1010 \)
-
-We begin at the start state \( q_0 \) and process \( w = 1010 \) step by step.
-
-\begin{enumerate}
-    \item \textbf{Input 1:} From \( q_0 \), on input \( 1 \), transition to \( q_1 \).
-    \[
-    q_0 \xrightarrow{1} q_1
-    \]
-    \item \textbf{Input 0:} From \( q_1 \), on input \( 0 \), transition to \( q_2 \).
-    \[
-    q_1 \xrightarrow{0} q_2
-    \]
-    \item \textbf{Input 1:} From \( q_2 \), on input \( 1 \), transition to \( q_1 \).
-    \[
-    q_2 \xrightarrow{1} q_1
-    \]
-    \item \textbf{Input 0:} From \( q_1 \), on input \( 0 \), transition to \( q_2 \).
-    \[
-    q_1 \xrightarrow{0} q_2
-    \]
-\end{enumerate}
-
-\textbf{Final State for \( w = 1010 \):} \( q_2 \) (not an accepting state)
-
-The power set \( P(Q) \), which represents the states of the equivalent DFA, can be represented as:
-
-\[
-P(Q) = \{ \emptyset, \{q_0\}, \{q_1\}, \{q_2\}, \{q_3\}, \{q_0, q_1\}, \{q_1, q_2\}, \{q_2, q_3\}, \{q_1, q_3\}, \{q_0, q_2\}, \{q_0, q_3\}, \{q_0, q_1, q_2\}, Q \}
-\]
-
-The DFA \( \mathcal{A}^D \) accepts the same language as \( \mathcal{A} \). By construction, the power set method guarantees that \( \mathcal{A}^D \) accepts exactly the same strings as \( \mathcal{A} \).
-Since every NFA has an equivalent DFA, and \( \mathcal{A}^D \) was obtained directly from \( \mathcal{A} \) via determinization.
-After minimization, a smaller DFA may exist that recognizes \( L(\mathcal{A}) \) with fewer states than the DFA obtained via power set construction.
-The minimal DFA provides a more efficient representation of the same language.
- 
+The DFA $\mathcal{A}^D$ accepts the same language as the original NFA $\mathcal{A}$.
 \subsection*{Reading Summary and Questions}
 
 Section 3.1 introduces regular expressions, which provide a structured way to define patterns in strings. They use operations like union (\(\cup\)) to represent choices, 
@@ -648,8 +545,7 @@ My question this week was about converting a DFA into a regular expression and w
 
 
 \subsection{Week 6}
-
-\subsection*{Notes}
+\smallskip
 
 \subsection*{Homework}
 \textbf{3.2.1:}
@@ -781,11 +677,15 @@ My question this week was asking if there are any situations where minimizing a 
 
 
 \subsection{Week 7}
+\smallskip
 
-\subsection*{Notes}
 
+% --- Week 7 Homework: Corrected Version ---
 \subsection*{Homework}
-{Turing Machine Code (in 5-tuple format):
+
+\subsubsection*{Exercise 1: Turing Machine for Even Number of 0s}
+
+\textbf{Machine Description:} Accepts binary strings that contain an even number of 0s.
 
 \begin{lstlisting}
 (q_even, 0, 0, R, q_odd)
@@ -796,19 +696,84 @@ My question this week was asking if there are any situations where minimizing a 
 (q_odd, _, _, R, q_reject)
 \end{lstlisting}
 
-\paragraph{Transition Table:}
-
 \begin{center}
-\begin{tabular}{@{}lllll@{}}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
 Current State & Read Symbol & Write Symbol & Move & Next State \\
-\texttt{q\_even} & 0 & 0 & R & \texttt{q\_odd} \\
-\texttt{q\_even} & 1 & 1 & R & \texttt{q\_even} \\
-\texttt{q\_even} & \_ & \_ & R & \texttt{q\_accept} \\
-\texttt{q\_odd}  & 0 & 0 & R & \texttt{q\_even} \\
-\texttt{q\_odd}  & 1 & 1 & R & \texttt{q\_odd} \\
-\texttt{q\_odd}  & \_ & \_ & R & \texttt{q\_reject} \\
+\hline
+$q_{even}$ & 0 & 0 & R & $q_{odd}$ \\
+$q_{even}$ & 1 & 1 & R & $q_{even}$ \\
+$q_{even}$ & \_ & \_ & R & $q_{accept}$ \\
+$q_{odd}$ & 0 & 0 & R & $q_{even}$ \\
+$q_{odd}$ & 1 & 1 & R & $q_{odd}$ \\
+$q_{odd}$ & \_ & \_ & R & $q_{reject}$ \\
+\hline
 \end{tabular}
 \end{center}
+
+\subsubsection*{Exercise 2: More Turing Machines and Explanations}
+
+\textbf{(a) TM that accepts all strings containing substring 010:}
+
+\begin{lstlisting}
+(q0, 0, 0, R, q1)
+(q0, 1, 1, R, q0)
+(q1, 1, 1, R, q2)
+(q1, 0, 0, R, q1)
+(q2, 0, 0, R, q_accept)
+(q2, 1, 1, R, q0)
+(q0, _, _, R, q_reject)
+(q1, _, _, R, q_reject)
+(q2, _, _, R, q_reject)
+\end{lstlisting}
+
+\textbf{Explanation:} 
+The machine starts in $q_0$, scanning for the first 0. Once it sees it, it moves to $q_1$ and looks for a 1. If it sees a 1, it transitions to $q_2$ and looks for a 0. If it sees 0, it accepts. Otherwise, it loops back and continues scanning.
+
+\bigskip
+
+\textbf{(b) TM that accepts palindromes over \{0,1\}:}
+
+\begin{lstlisting}
+(q0, 0, _, R, q1_0)
+(q0, 1, _, R, q1_1)
+(q0, _, _, R, q_accept)
+(q1_0, 0, 0, R, q1_0)
+(q1_0, 1, 1, R, q1_0)
+(q1_0, _, _, L, q2_0)
+(q1_1, 0, 0, R, q1_1)
+(q1_1, 1, 1, R, q1_1)
+(q1_1, _, _, L, q2_1)
+(q2_0, 0, _, L, q0)
+(q2_0, _, _, R, q_accept)
+(q2_1, 1, _, L, q0)
+(q2_1, _, _, R, q_accept)
+\end{lstlisting}
+
+\textbf{Explanation:}
+This machine checks the first and last characters. It removes matching symbols and recurses inward. If all matches are confirmed, it accepts. Otherwise, it rejects. It uses marker states to remember whether the first character was 0 or 1.
+
+\bigskip
+
+\textbf{(c) TM that checks if number of 0s equals number of 1s:}
+
+\begin{lstlisting}
+(q0, 0, _, R, q1)
+(q0, 1, _, R, q2)
+(q0, _, _, R, q_accept)
+(q1, 0, 0, R, q1)
+(q1, 1, _, R, q3)
+(q1, _, _, R, q_reject)
+(q2, 1, 1, R, q2)
+(q2, 0, _, R, q3)
+(q2, _, _, R, q_reject)
+(q3, 0, 0, L, q0)
+(q3, 1, 1, L, q0)
+(q3, _, _, R, q_accept)
+\end{lstlisting}
+
+\textbf{Explanation:}
+This machine alternates marking one 0 and one 1 each cycle. If any extra unpaired symbols remain, it rejects. If it finds a match each time and the tape is eventually blank, it accepts.
 
 \subsection*{Reading Summary and Questions}
 
@@ -824,7 +789,7 @@ My question this week was how has AI affected the Turing machine and will it eve
 
 \subsection{Week 8}
 
-\subsection*{Notes}
+\smallskip
 
 \subsection*{Homework}
 \subsubsection*{Exercise 1: Decidability Classifications}
@@ -866,8 +831,8 @@ if it’s “no,” it might run forever. These sections show that some problems
 This week I asked if some problems are only semi solvable, is there a way to identify patterns or conditions that help us guess when a solution could exist?
 
 \subsection{Week 9}
+\smallskip
 
-\subsection*{Notes}
 
 \subsection*{Homework}
 \textbf{Exercise 1: Order of Growth}
@@ -961,8 +926,8 @@ way, and why some problems, no matter how important, probably won’t ever have 
 My question this week was asking if there are other ways to classify problems that dont fall into P or NP other then polynomial time reductions?
 
 \subsection{Week 10}
+\smallskip
 
-\subsection*{Notes}
 
 \subsection*{Homework}
 \begin{enumerate}
@@ -1052,8 +1017,7 @@ in computer science.
 The question I asked this week was if there were any real life examples of NP-complete problems and how they are used in practice.
 
 \subsection*{Week 11}
-
-\subsection*{Notes}
+\smallskip
 
 \subsection*{Homework}
 \textbf{Exercise 1: Maximal Flow \& Minimal Cut}
@@ -1161,14 +1125,45 @@ for solving complex network flow problems.
 
 My question this week was about the real life applications of the Max-Flow Min-Cut Theorem and Ford-Fulkerson algorithm and the benefits and drawbacks of each.
 
+
 \section{Synthesis}
+
+This course offered a comprehensive introduction to the theory of computation, gradually building from foundational concepts like finite automata to more advanced topics such as Turing machines, undecidability, and computational complexity. What I found most valuable was how each concept was not presented in isolation but instead built on and reinforced earlier material. As the semester progressed, I developed a clearer understanding of how these different models of computation are deeply interconnected.
+
+We began with deterministic and nondeterministic finite automata (DFAs and NFAs), which provided a structured way to recognize regular languages. Initially, the distinction between DFAs and NFAs seemed significant, but learning that they accept the same class of languages helped me appreciate that different computational models can have equivalent power, even if they differ in structure or efficiency. This theme of equivalence appeared repeatedly throughout the course, reinforcing the idea that how we represent a problem can impact its complexity without changing its fundamental nature.
+
+As we advanced to Turing machines, the focus shifted from pattern recognition to the full scope of algorithmic computation. Turing machines introduced the idea of simulating any computable function and laid the groundwork for understanding what problems are solvable in principle. The discussion of undecidable problems, such as the Halting Problem, was particularly impactful. It was eye-opening to realize that some problems are not just difficult—they are provably unsolvable by any algorithm, regardless of time or resources. This challenged many of my assumptions about the capabilities of computers.
+
+In the final portion of the course, we explored computational complexity, particularly the distinction between P and NP, and the role of NP-complete problems. These topics added a new dimension to our understanding of solvability by introducing the importance of efficiency. The use of polynomial-time reductions to relate problems in different domains highlighted the surprising connections between seemingly unrelated computational challenges.
+
+Altogether, this course helped me see theoretical computer science as a cohesive framework for understanding computation. Automata, formal languages, Turing machines, and complexity theory are not just abstract topics—they form a unified language for expressing and analyzing problems. Gaining this perspective has helped me think more critically about the design and limitations of algorithms and has deepened my appreciation for the fundamental questions that drive computer science as a discipline.
 
 \section{Evidence of Participation}
 
+% Conclusion Section
 \section{Conclusion}\label{conclusion}
 
+Looking back at this course, I feel like I’ve gained a much stronger understanding of what computation is at its core. Before this class, I mostly thought of computer science in terms of coding and building systems, but now I see how important the theoretical foundations are. Concepts like finite automata, Turing machines, and computational complexity have given me a new lens for thinking about how we approach problems, and more importantly, how we define what’s even possible to solve.
+
+The weekly homework and readings pushed me to not just memorize definitions, but actually apply and connect the ideas. I especially appreciated how topics that felt separate at first, like DFAs, regular expressions, and NP-completeness, all came together by the end. That sense of everything clicking into place made the abstract concepts feel a lot more meaningful.
+
+Overall, this course challenged me to think more deeply and critically about computer science. It reminded me that understanding the "why" behind the tools we use is just as important as knowing how to use them. I’m leaving this class not just with knowledge, but with a stronger curiosity about the limits and potential of computation, and how these ideas shape the technology we build every day.
+
+% Updated bibliography
 \begin{thebibliography}{99}
-\bibitem[BLA]{bla} Author, \href{https://en.wikipedia.org/wiki/LaTeX}{Title}, Publisher, Year.
+
+\bibitem[HMU]{hopcroft}
+John E. Hopcroft, Rajeev Motwani, and Jeffrey D. Ullman, 
+\textit{Introduction to Automata Theory, Languages, and Computation}, 
+3rd Edition, Addison-Wesley, 2006. 
+\href{https://archive.org/details/hopcroft-motwani-ullman-introduction-to-automata-theory-languages-and-computations-3rd-edition/}{Available online}
+
+\bibitem[Bondy]{bondy}
+Jonathan L. Gross and Jay Yellen, 
+\textit{Graph Theory with Applications to Engineering and Computer Science}, 
+Prentice Hall, 1976. 
+\href{https://archive.org/details/GraphTheoryWithApplicationsToEngineeringAndComputerScience/}{Available online}
+
 \end{thebibliography}
 
 \end{document}
