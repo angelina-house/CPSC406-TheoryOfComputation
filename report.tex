@@ -76,26 +76,27 @@
 \maketitle
 
 \begin{abstract}
+This report documents my learning and progress throughout the Spring 2025 semester in CPSC-406: Theory of Computation. It includes weekly homework solutions, reading reflections, and conceptual analysis spanning topics such as finite automata, regular languages, Turing machines, undecidability, and computational complexity. The report emphasizes both technical rigor and personal insight, highlighting how core ideas build upon one another, from basic state machines to deeper questions about what can or cannot be computed. Alongside formal exercises, I include reflections on how theoretical concepts relate to real-world computing problems, especially in areas like language processing, algorithms, and cybersecurity. A synthesis section connects major themes, while the conclusion reflects on the course’s overall impact on my understanding of computer science fundamentals.
 \end{abstract}
 
 \setcounter{tocdepth}{3}
 \tableofcontents
 
+
 \section{Introduction}\label{intro}
+
+This report chronicles my work in CPSC-406: Theory of Computation during Spring 2025. Each weekly subsection contains restated homework prompts, fully typeset solutions, and a brief reflection or question that ties the technical material to broader themes.
+
+The course moved from foundational models such as deterministic and nondeterministic finite automata to Turing machines, undecidability, and complexity classes. Along the way, I explored how these topics interconnect and what they reveal about the limits of computation. Code written for labs is stored in the \texttt{py-automata/} directory and referenced where relevant.
+
+The final pages contain a synthesis of major concepts, evidence of my participation in lectures and office hours, and a concluding reflection on how the course reshaped my view of computer science and its applications, particularly in cybersecurity.
 
 \section{Week by Week}\label{homework}
 
 \subsection{Week 1}
 \smallskip
 
-\subsubsection*{Notes}
-
-In week one we were introduced to basic automata therory and given multiple examples of how they can be used. 
-Our main example was one of a parking meter where we were introduced to states, transitions, and final states. 
-We also went over naming specifications, word lists and equations, and finite automata. 
-  
-% --- Week 1 Homework: Updated Automaton Descriptions ---
-\subsubsection*{Homework}
+\subsection*{Homework}
 
 \textbf{Question 1:} Characterize all the accepted words (i.e., describe exactly those words that get recognized).
 \smallskip
@@ -116,57 +117,53 @@ That is, any word over \(\{5, 10\}\) whose sum is exactly 15, in any order. No e
 
 \textbf{Question 2:} Characterize all the accepted words. Can you describe them via a regular expression?
 
-From the automaton image, this is a turnstile with two states: \texttt{Locked} and \texttt{Unlocked}. The actions are \texttt{pay} and \texttt{push}. The automaton starts in the Locked state. \texttt{pay} in Locked moves to Unlocked; \texttt{push} in Unlocked returns to Locked. Other actions leave the state unchanged.
+From the automaton image, this is a turnstile with two states: \texttt{Locked} and \texttt{Unlocked}. The actions are \texttt{pay} and \texttt{push}. The automaton starts in the \texttt{Locked} state. \texttt{pay} in \texttt{Locked} moves to \texttt{Unlocked}; \texttt{push} in \texttt{Unlocked} returns to \texttt{Locked}. Other actions leave the state unchanged.
 
-Accepted words are those that end in the Unlocked state. That is, sequences where the number of \texttt{pay}'s is greater than the number of \texttt{push}'s, and every prefix has at least as many \texttt{pay}'s as \texttt{push}'s.
+Accepted words are those that end in the \texttt{Unlocked} state. That is, sequences where the number of \texttt{pay} actions is greater than the number of \texttt{push} actions, and every prefix has at least as many \texttt{pay} as \texttt{push}.
 
 Some accepted words:
 \[
 \begin{aligned}
     &\texttt{pay} \\
-    &\texttt{pay pay} \\
-    &\texttt{pay push pay} \\
-    &\texttt{pay pay push pay} \\
+    &\texttt{pay\ pay} \\
+    &\texttt{pay\ push\ pay} \\
+    &\texttt{pay\ pay\ push\ pay} \\
 \end{aligned}
 \]
 In general, the language is described by the regular expression:
 \[
-\texttt{pay (push pay)^*}
+\texttt{pay}\ (\texttt{push}\ \texttt{pay})^*
 \]
 That is, a \texttt{pay} followed by zero or more repetitions of \texttt{push pay}.
 
 \bigskip
 
-\subsubsection*{Reading Summary}
+\subsection*{Reading Summary}
 
-There was no readings or questions for this week. 
+There were no readings or questions for this week.
 
 \bigskip
 
 \subsection{Week 2}
 \smallskip
 
+\subsection*{Homework}
 
-\subsubsection*{Notes}
-
-This week we covered Derterministic Finite Automata (DFA) and continued to build on our definition on automata from week one. 
-We focused on the bridge problem where we had to determine the best way to get across and then turn that into a DFA. 
-We also had our first lab where we focused on word processing and constructing automata. 
-
-
-\subsubsection*{Homework}
-
-%Homework One builds on the foundations of automata that was covered last week. 
-\textbf{Question 1:} Determine for the following words, if they are contained in  L1, L2, or L3
+\textbf{Question 1:} Determine for the following words, if they are contained in  \(L_1\), \(L_2\), or \(L_3\)
 \smallskip
 
 The equations are:
+\[
+L_1 := \{ x01y \mid x, y \in \Sigma^* \}
+\]
+\[
+L_2 := \{ w \mid |w| = 2^n \text{ for some } n \in \mathbb{N} \}
+\]
+\[
+L_3 := \{ w \mid |w|_0 = |w|_1 \}
+\]
 
-\[L_1 := \{ x01y \mid x, y \in \Sigma^* \}\]
-\[L_2 := \{ w \mid |w| = 2^n \text{ for some } n \in \mathbb{N} \}\]
-\[L_3 := \{ w \mid |w|_0 = |w|_1 \}\]
-
-Using the given chart and the given equations we can come to the following conclusions.
+Using the provided chart and equations, we can come to the following conclusions.
 
 \smallskip
 
@@ -190,30 +187,33 @@ Using the given chart and the given equations we can come to the following concl
 
 \smallskip
 
-By following the the language equations, conditions, and comparing using the word we can determine whether the word would be accepted in the equation.
+By following the language equations, conditions, and comparing with the word, we can determine whether the word would be accepted in the equation.
 
 \bigskip
 
 \textbf{Question 2:} Let \( \Sigma \) be some fixed alphabet and \( \mathcal{A} = (Q, \Sigma, \delta, q_0, F) \) be a finite automaton. The DFA \( \mathcal{A} \) can "process" a word by tracing through it via a sequence of transitions corresponding to the letters of the word.
-\\Consider the paths corresponding to the words:
 
-\[w_1 = 0010, \quad w_2 = 1101, \quad \text{and} \quad w_3 = 1100.\]
+Consider the paths corresponding to the words:
+\[
+w_1 = 0010,\quad w_2 = 1101,\quad \text{and} \quad w_3 = 1100.
+\]
 
 For which of these words does their run end in the accepting state?
-\[w_1 \text{ and } w_2 \text{ end in the accepting state. Following the given graph and going through the word we can determine that }  w_1 \text{ and } w_2 \text{will end in the acceptin state and } w_3 \text{ will end at } q_2 \text{which is not the accepted state.}\]
+\[
+w_1 \text{ and } w_2 \text{ end in the accepting state. Following the provided graph and going through the word, we can determine that } w_1 \text{ and } w_2 \text{ will end in the accepting state and } w_3 \text{ will end at } q_2, \text{ which is not the accepting state.}
+\]
 
+\subsection*{Reading Summary and Questions}
 
-\subsubsection*{Reading Summary and Questions}
-
-Section 2.1 introduces finite automata in a straightforward easy to comprehend way by explaining how they work and why they’re useful. A finite automaton is a simple computational model that processes input by transitioning between a set number of states. It follows predefined 
+Section 2.1 introduces finite automata in a straightforward, easy-to-comprehend way by explaining how they work and why they’re useful. A finite automaton is a simple computational model that processes input by transitioning between a set number of states. It follows predefined 
 rules to determine what state to move to based on the input it receives. The section gives real world examples where finite automata are applied, such as text searching, lexical analysis in programming languages, digital circuit design, and verifying network protocols. 
-These machines help computers recognize patterns and process sequences efficiently.The section discusses two main types, Deterministic Finite Automata (DFA), where each state has only one possible transition per input, and Nondeterministic Finite Automata (NFA), which allows
-multiple possible transitions. Both are equally as powerful but NFA's are typically more flexible. This section doesn’t get too technical yet it just lays the foundation for the more detailed discussions coming later. The key takeaway is that while finite automata are simple,
+These machines help computers recognize patterns and process sequences efficiently. The section discusses two main types, Deterministic Finite Automata (DFA), where each state has only one possible transition per input, and Nondeterministic Finite Automata (NFA), which allows
+multiple possible transitions. Both are equally as powerful but NFAs are typically more flexible. This section doesn’t get too technical yet; it just lays the foundation for the more detailed discussions coming later. The key takeaway is that while finite automata are simple,
 they play an essential role in many areas of computer science, especially in recognizing and processing data.
 
 \smallskip
 
-My questions this week was regarding the complexities of finite automata. It was "Is there a point where an automata gets too complicated to the point where its not the best option anymore? If so, is there any alternatives to the automaton that might work better in this situation?"
+My question this week was regarding the complexities of finite automata. It was "Is there a point where an automaton gets too complicated to the point where it's not the best option anymore? If so, are there any alternatives to the automaton that might work better in this situation?"
 
 \subsection{Week 3}
 \smallskip
@@ -268,13 +268,13 @@ The operation of a DFA is systematic: it begins in the initial state and process
 Once the entire input has been read, the DFA determines acceptance based on its final state. If it ends in an accepting state, the input is considered valid; otherwise, it is rejected.
 Formally, a DFA is defined as a five-tuple $(Q, \Sigma, \delta, q_0, F)$, where $Q$ is the set of states, $\Sigma$ is the input alphabet, $\delta$ is the transition function that maps 
 states and inputs to new states, $q_0$ is the initial state, and $F$ is the set of accepting states. 
-DFAs are widely used in applications such as text searching, lexical analysis in programming, and pattern recognition. Their deterministic nature makes sure that for any given input, 
-the transition path is unique making them both predictable and efficient for structured data processing.
+DFAs are widely used in applications such as text searching, lexical analysis in programming, and pattern recognition. Their deterministic nature ensures that for any given input, 
+the transition path is unique, making them both predictable and efficient for structured data processing.
 
 \smallskip
 
-This week I was curious about the limits of a DFA. My question was "The book emphasized that DFA's can only process one string at a time but would we ever get to the point where it would 
-be able to process multiple strings at one time? Would it make the DFA simpler or more complex and at what point would we have to get quantum computing involved?"
+This week I was curious about the limits of a DFA. My question was "The book emphasized that DFAs can only process one string at a time, but would we ever get to the point where it would 
+be able to process multiple strings at one time? Would it make the DFA simpler or more complex, and at what point would we have to get quantum computing involved?"
 
 \subsection{Week 4}
 \smallskip
@@ -422,7 +422,7 @@ in these situations?
 \smallskip
 
  
-% --- Week 5 Homework: Revised Version ---
+% Week 5 Homework: Revised Version
 \subsection*{Homework}
 
 \textbf{Question 1: DFA to NFA Translation}
@@ -439,31 +439,31 @@ This translation preserves the language, since every DFA is a valid NFA.
 
 \bigskip
 
-\textbf{Question 2: Constructing $A^D$ from an NFA $A$}
+\textbf{Question 2: Constructing $\mathcal{A}^D$ from an NFA $\mathcal{A}$}
 
 We define NFA $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ where:
 
 \begin{itemize}
     \item $Q = \{q_0, q_1, q_2, q_3\}$
-    \item $\Sigma = \{0,1\}$
+    \item $\Sigma = \{0, 1\}$
     \item $q_0$ is the initial state
     \item $F = \{q_3\}$
     \item Transition function $\delta$:
 \end{itemize}
 
 \begin{align*}
-\delta(q_0, 1) &= \{q_1\} \\
-\delta(q_1, 0) &= \{q_2\} \\
-\delta(q_2, 1) &= \{q_1\} \\
-\delta(q_2, 0) &= \{q_3\} \\
-\delta(q_1, 1) &= \{q_1\} \\
-\delta(q_3, 0) &= \{q_3\} \\
-\delta(q_3, 1) &= \{q_3\}
+    \delta(q_0, 1) &= \{q_1\} \\
+    \delta(q_1, 0) &= \{q_2\} \\
+    \delta(q_2, 1) &= \{q_1\} \\
+    \delta(q_2, 0) &= \{q_3\} \\
+    \delta(q_1, 1) &= \{q_1\} \\
+    \delta(q_3, 0) &= \{q_3\} \\
+    \delta(q_3, 1) &= \{q_3\}
 \end{align*}
 
 \bigskip
 
-\textbf{Computing $\hat{\delta}(q_0, 10110)$}
+\textbf{Computing $\hat{\delta}(q_0, 10110)$:}
 
 \begin{itemize}
     \item $q_0 \xrightarrow{1} q_1$
@@ -477,34 +477,34 @@ Final state: $q_2$ (not accepting)
 
 \bigskip
 
-\textbf{Computing $\hat{\delta}(q_0, 1100)$}
+\textbf{Computing $\hat{\delta}(q_0, 1100)$:}
 
 There are two possible paths:
 \begin{itemize}
-    \item Path 1:
-        \begin{itemize}
-            \item $q_0 \xrightarrow{1} q_1$
-            \item $q_1 \xrightarrow{1} q_1$
-            \item $q_1 \xrightarrow{0} q_2$
-            \item $q_2 \xrightarrow{0} q_3$
-        \end{itemize}
-        Ends in $q_3$ (accepting)
+\item Path 1:
+    \begin{itemize}
+        \item $q_0 \xrightarrow{1} q_1$
+        \item $q_1 \xrightarrow{1} q_1$
+        \item $q_1 \xrightarrow{0} q_2$
+        \item $q_2 \xrightarrow{0} q_3$
+    \end{itemize}
+    Ends in $q_3$ (accepting).
 
-    \item Path 2:
-        \begin{itemize}
-            \item $q_0 \xrightarrow{1} q_1$
-            \item $q_1 \xrightarrow{1} q_1$
-            \item $q_1 \xrightarrow{0} q_2$
-            \item $q_2 \xrightarrow{0} q_2$
-        \end{itemize}
-        Ends in $q_2$ (not accepting)
+\item Path 2:
+    \begin{itemize}
+        \item $q_0 \xrightarrow{1} q_1$
+        \item $q_1 \xrightarrow{1} q_1$
+        \item $q_1 \xrightarrow{0} q_2$
+        \item $q_2 \xrightarrow{0} q_2$
+    \end{itemize}
+    Ends in $q_2$ (not accepting).
 \end{itemize}
 
 Since one path ends in an accepting state, the word $1100$ is accepted by $\mathcal{A}$.
 
 \bigskip
 
-\textbf{Constructing DFA $\mathcal{A}^D$ (determinization)}
+\textbf{Constructing DFA $\mathcal{A}^D$ (determinization):}
 
 Use the powerset construction:
 
@@ -512,7 +512,7 @@ Use the powerset construction:
     \item States: $\mathcal{P}(Q)$ (all subsets of $Q$), such as $\emptyset$, $\{q_0\}$, $\{q_1, q_2\}$, etc.
     \item Start state: $\{q_0\}$
     \item Accepting states: any subset that contains $q_3$
-    \item Transition function: for any $S \subseteq Q$ and $a \in \Sigma$:
+    \item Transition function: for any $S \subseteq Q$ and $a \in \Sigma$,
     \[
     \delta_D(S, a) = \bigcup_{q \in S} \delta(q, a)
     \]
@@ -1138,7 +1138,24 @@ In the final portion of the course, we explored computational complexity, partic
 
 Altogether, this course helped me see theoretical computer science as a cohesive framework for understanding computation. Automata, formal languages, Turing machines, and complexity theory are not just abstract topics—they form a unified language for expressing and analyzing problems. Gaining this perspective has helped me think more critically about the design and limitations of algorithms and has deepened my appreciation for the fundamental questions that drive computer science as a discipline.
 
+% --- Evidence of Participation Section ---
 \section{Evidence of Participation}
+
+Throughout the semester, I actively engaged with the material by asking thoughtful questions at the end of each week's reading summary. These questions were designed to explore the broader implications of what we were learning—such as the practical uses of finite automata, the boundaries of what is computationally solvable, and the real-world impact of NP-complete problems. Asking these questions each week helped me move from simply solving problems to understanding the bigger picture of computation theory and its relevance beyond the classroom.
+
+In addition to classroom engagement, I supplemented my learning with relevant cybersecurity-focused podcasts—many of which I’ve been listening to since before this class. However, throughout this semester, I began to connect what I was hearing in those episodes to the theoretical concepts we were learning. This course gave me the language and frameworks to better understand the underlying computational challenges discussed in real-world security stories.
+
+Some specific episodes that helped highlight these connections include:
+\begin{itemize}
+    \item \textbf{Darknet Diaries — Episode 30: Shamoon}:
+    Covers a malware attack that overwrote files on thousands of systems. I was able to connect this to topics like state transitions and the irreversible effects modeled by Turing machines.
+    \item \textbf{Security Now — Episode 880: The Future of Encryption}:
+    Discusses theoretical limits of encryption and quantum computing. This tied directly into our coursework on what is computable and the complexity behind solving certain cryptographic problems.
+    \item \textbf{The CyberWire Daily — April 18, 2024 Episode}:
+    Reports on large-scale DDoS and supply chain attacks. Understanding regular languages and automata helped me better grasp how detection systems are structured to flag patterns in traffic.
+\end{itemize}
+
+These podcasts helped reinforce how ideas like state machines, regular languages, and computational complexity are used (or bypassed) in malicious software, intrusion detection systems, and data validation. By combining coursework with external content, I was able to deepen my understanding and make stronger interdisciplinary connections between computation theory and cybersecurity practice.
 
 % Conclusion Section
 \section{Conclusion}\label{conclusion}
